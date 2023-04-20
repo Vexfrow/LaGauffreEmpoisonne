@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-// L'interface runnable déclare une méthode run
 public class demoFenetre implements Runnable {
 	public void run() {
 		// Creation d'une fenetre
@@ -81,7 +80,19 @@ public class demoFenetre implements Runnable {
 		Box menuLateralDroite = new Box(BoxLayout.Y_AXIS);
 
 		Label texteJoueur = new Label("C'est au tour du joueur X");
+		menuLateralDroite.add(texteJoueur, BorderLayout.PAGE_START);
+
+		JTextArea listeCoup = new JTextArea("Historique des coups :\n");
+		listeCoup.setEditable(false);
+		JScrollPane historiqueCoup = new JScrollPane(listeCoup);
+		menuLateralDroite.add(historiqueCoup);
+
+		listeCoup.setBackground(Color.getHSBColor(204, 100, 81));
+		menuLateralDroite.setBackground(Color.getHSBColor(204, 100, 81));
+		historiqueCoup.setBackground(Color.getHSBColor(204, 100, 81));
+
 		
+
 
 		frame.add(menuLateralDroite, BorderLayout.LINE_END);
 
