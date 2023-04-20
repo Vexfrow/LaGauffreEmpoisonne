@@ -27,14 +27,22 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 
 // L'interface runnable déclare une méthode run
 public class demoFenetre implements Runnable {
+
+	private Color orange;
+	private int ligne;
+	private int colonne;
+	JButton matrix[][];
+	JFrame frame;
+	JPanel p;
 	public void run() {
 		// Creation d'une fenetre
-		JFrame frame = new JFrame("La gaufre empoisonée");
+		
+		
+
 
 		// Un clic sur le bouton de fermeture clos l'application
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,12 +87,55 @@ public class demoFenetre implements Runnable {
 
 		frame.add(menuLateralDroite, BorderLayout.LINE_END);
 		frame.add(menuHorinzontalHaute, BorderLayout.NORTH);
+		frame.add(p);
+
 	}
 
-	public static void main(String[] args) {
-		// Swing s'exécute dans un thread séparé. En aucun cas il ne faut accéder directement
-		// aux composants graphiques depuis le thread principal. Swing fournit la méthode
-		// invokeLater pour demander au thread de Swing d'exécuter la méthode run d'un Runnable.
-		SwingUtilities.invokeLater(new demoFenetre());
+	public void majNiveau(char[][] niveau){
+		for(int i = 0; i < ligne; i++){
+			for(int j=0; j < colonne; j++){
+				if(i == 0 && j ==0){
+					;
+				}else{
+					if(niveau[i][j] == 1){
+						System.out.println("Sortie :"+ i + " " + j);
+						matrix[i][j].setBackground(new Color(255, 255, 255));
+						matrix[i][j].setEnabled(false);
+					}else{
+						matrix[i][j].setBackground(orange);
+						matrix[i][j].setEnabled(true);
+					}
+					
+				}
+
+			}
+		}
 	}
+
+	public demoFenetre(int x, int y){
+		this.ligne = x;
+		this.colonne = y;
+		this.orange = new Color(250, 180, 50);
+		frame = new JFrame("La gaufre empoisonée");
+		p = new JPanel();
+
+		this.matrix = new JButton[this.ligne][this.colonne];
+		p.setLayout(new GridLayout(ligne, colonne, 0, 0));
+		for(int i = 0; i < ligne; i++){
+			for(int j=0; j < colonne; j++){
+				JButton b = new JButton();
+				if(i == 0 && j ==0){
+					b.setBackground(new Color(10, 240, 10));
+				}else{
+					b.setBackground(orange);
+				}
+				matrix[i][j] = b;
+				p.add(b);
+
+			}
+		}
+	}
+
+	
+
 }
