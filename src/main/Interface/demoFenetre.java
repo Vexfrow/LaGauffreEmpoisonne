@@ -12,6 +12,9 @@ public class demoFenetre implements Runnable {
 	JButton matrix[][];
 	JFrame frame;
 	JPanel p;
+
+
+
 	public void run() {
 		// Creation d'une fenetre
 		JFrame frame = new JFrame("La gaufre empoisonée");
@@ -149,6 +152,10 @@ public class demoFenetre implements Runnable {
 
 			}
 		}
+	}
+
+	public static void main(String args[]){
+		SwingUtilities.invokeLater(new demoFenetre(5, 5));
 	}
 
 
