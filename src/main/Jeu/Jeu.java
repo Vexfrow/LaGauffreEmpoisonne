@@ -59,6 +59,8 @@ public class Jeu {
         }
 
     }
+
+
     public boolean peutRefaire(){
         if (coupAnnule.size() < 1){
             return false;
@@ -68,6 +70,8 @@ public class Jeu {
 
 
     }
+
+    
     public void joue(Coup cp){
         int l = cp.l;
         int c = cp.c;

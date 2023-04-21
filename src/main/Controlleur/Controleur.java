@@ -5,6 +5,8 @@ package Controlleur;
 
 import Jeu.Coup;
 import Jeu.Jeu;
+import Joueur.Human;
+import Joueur.Joueur;
 import Interface.demoFenetre;
 
 
@@ -16,11 +18,22 @@ public class Controleur{
     private static final int PVE = 2;
     private static final int EVE = 3;
 
+    private Joueur p1;
+    private Joueur p2;
+
 
     public Controleur(Jeu j){
         this.j = j;
+        this.type = Controleur.PVP;
+        p1 = new Human(j);
+        p2 = new Human(j);
         
     }
+
+    public void choseType(int t){
+        this.type = t;
+    }
+
 
     public void ajouteNiv(demoFenetre d){
         this.window = d;

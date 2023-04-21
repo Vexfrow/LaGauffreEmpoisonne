@@ -6,10 +6,10 @@ import Jeu.Jeu;
 
 
 
-class IArandom extends Joueur {
+public class IArandom extends Joueur {
     Random r;
 
-    IArandom(Jeu j){
+    public IArandom(Jeu j){
         super(j);
 
     }

@@ -13,9 +13,7 @@ public class Gaufre {
 
         demoFenetre window = new demoFenetre(j, c);
         c.ajouteNiv(window);
-
         //System.out.println(j);
-
         window.majNiveau(j.terrain);
         
     }

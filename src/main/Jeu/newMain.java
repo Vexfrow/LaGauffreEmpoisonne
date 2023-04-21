@@ -1,6 +1,5 @@
+package Jeu;
 
-import Jeu.Jeu;
-import Jeu.Coup;
 public class newMain {
 
 
