@@ -1,5 +1,6 @@
-./out/*
 LaGauffreEmpoisonne.iml
 ./.idea/*
 .project
 *.class
+.gitignore
+.idea/

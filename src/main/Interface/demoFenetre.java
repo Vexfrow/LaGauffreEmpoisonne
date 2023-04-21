@@ -3,6 +3,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.nio.file.Path;
 
 public class demoFenetre implements Runnable {
 
@@ -100,7 +103,7 @@ public class demoFenetre implements Runnable {
 		buttonChargerP.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Clique sur le bouton \"Charger Partie\" ");
+				chargerFichier();
 			}
 		});
 
@@ -190,6 +193,58 @@ public class demoFenetre implements Runnable {
 
 
 	}
+
+
+
+	public void chargerFichier(){
+
+		JFrame jf = new JFrame();
+
+		File repertoireSauvegarde = new File(System.getProperty("user.dir")+"/rsc/sauvegarde/");
+		File[] listeFile = repertoireSauvegarde.listFiles();
+
+		JList<File> listeFichiers = new JList<>(listeFile);
+
+
+
+		Box boxSud = new Box(BoxLayout.X_AXIS);
+
+		Button boutonOpen = new Button("Open");
+		Button boutonClose = new Button("Close");
+
+		boutonOpen.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				File fichierChoisi = listeFichiers.getSelectedValue();
+				if(fichierChoisi != null){
+					System.out.println("Fichier choisi = " + fichierChoisi.getAbsolutePath());
+					//Appel à la fonction modifier jeu avec le fichier choisi
+				}
+			}
+		});
+
+		boutonClose.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
+			}
+		});
+
+		boxSud.add(boutonOpen);
+		boxSud.add(boutonClose);
+
+
+		jf.add(boxSud, BorderLayout.SOUTH);
+		jf.add(listeFichiers, BorderLayout.CENTER);
+
+
+		// On fixe la taille et on démarre
+		jf.setSize(500, 300);
+		jf.setVisible(true);
+
+
+	}
+
 
 
 }
