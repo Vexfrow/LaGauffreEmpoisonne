@@ -1,6 +1,6 @@
 package Jeu;
 
-
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -20,23 +20,52 @@ public class Jeu {
         terrain = new int[nbligne][nbcolonne];
         this.nbligne = nbligne;
         this.nbcolonne = nbcolonne;
+        coupAnnule = new ArrayList<Coup>();
+        coupJoue = new ArrayList<Coup>();
 
     }
 
     public void annule(){
+        if(peutAnnuler()){
+            Jeu jeu = new Jeu(nbligne,nbcolonne);
+            int i = 0;
+            coupAnnule.add(coupJoue.get(coupJoue.size()-1));
+            coupJoue.remove(coupJoue.size()-1);
+
+            while( i < coupJoue.size()){
+                jeu.joue(coupJoue.get(i));
+                i++;
+            }
+            this.terrain = jeu.terrain;
+
+        }
+
+        
 
     }
 
 
     public boolean peutAnnuler(){
-        return true;
-
+        return (!(coupJoue.size() < 1));
     }
+
+
     public void refaire(){
+        if(peutRefaire()){
+            Coup cp = coupAnnule.get(coupAnnule.size()-1);
+            joueAnnuler(coupAnnule.get(coupAnnule.size()-1));
+            coupJoue.add(cp);
+            coupAnnule.remove(coupAnnule.size()-1);
+        }
 
     }
     public boolean peutRefaire(){
-        return true;
+        if (coupAnnule.size() < 1){
+            return false;
+        }else{
+            return true;
+        }
+
 
     }
     public void joue(Coup cp){
@@ -50,9 +79,25 @@ public class Jeu {
             }
             l++;
         }
+        coupJoue.add(cp);
+        coupAnnule = new ArrayList<Coup>();
 
 
     }
+
+
+    public void joueAnnuler(Coup cp){
+        int l = cp.l;
+        int c = cp.c;
+        while( l < this.nbligne){
+            c= cp.c;
+            while(c < this.nbcolonne){
+                terrain[l][c] = 1;
+                c++;
+            }
+            l++;
+        }
+        }
 
 
     // nom du fichier*
