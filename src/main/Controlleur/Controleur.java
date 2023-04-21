@@ -80,5 +80,9 @@ public class Controleur{
         System.out.println("Sauvegarde appuyé");
     }
 
+    public void load(String fichier){
+        j.charger(fichier);
+        this.window.majNiveau(j.terrain);
+    }
 
 }

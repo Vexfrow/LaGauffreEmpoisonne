@@ -222,4 +222,65 @@ public class Jeu {
 		return result;
 	}
 
+    public void charger(String fichier){
+        try {
+    		
+    		//init des arrays
+    		coupAnnule = new ArrayList<Coup>();
+        	coupJoue = new ArrayList<Coup>();
+    		
+        	//ouverture fichier
+    		FileReader reader = new FileReader(fichier);
+    		BufferedReader bufferedReader = new BufferedReader(reader);
+    		
+    		String line;
+    		
+    		//recuperer le nombre de ligne
+    		line = bufferedReader.readLine();
+    		nbligne = Integer.parseInt(line);
+    		
+    		//recuperer le nombre de collone
+    		line = bufferedReader.readLine();
+    		nbcolonne = Integer.parseInt(line);
+    		
+    		//creation terrain
+    		terrain = new int[nbligne][nbcolonne];
+    		
+    		//recuprer tous les coups à jouer
+    		while ((line = bufferedReader.readLine()) != null && (!line.equals("b"))) {
+
+    				//split la ligne
+    				String[] parts = line.split(" ");
+    				
+    				//creer un nouveau coup
+    				Coup cp = new Coup(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+    				
+    				//jouer le coup
+    				joue(cp);
+    	        
+    	    }
+    		
+    		//recuprere les dernieres lignes du fichier
+    		while ((line = bufferedReader.readLine()) != null && (!line.equals("b"))) {
+				
+    			//split les lignes
+				String[] parts = line.split(" ");
+				//definir un nouveau  coup
+				Coup cp = new Coup(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+				
+				//ajoute le coup à l'arraylist
+				coupAnnule.add(cp);
+	        
+	    }
+    		
+    		//fermer le fichier
+    		reader.close();
+    		
+		} catch (IOException e) {
+			System.out.print("Erreur : " + e);
+			
+		}
+    }
+
+
 }

@@ -316,6 +316,7 @@ public class demoFenetre implements Runnable {
 				File fichierChoisi = listeFichiers.getSelectedValue();
 				if(fichierChoisi != null){
 					System.out.println("Fichier choisi = " + fichierChoisi.getAbsolutePath());
+					c.load(fichierChoisi.getAbsolutePath());
 					jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
 					//Appel à la fonction "modifier jeu" avec le fichier choisi
 				}
