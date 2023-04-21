@@ -2,6 +2,7 @@ package Jeu;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Jeu {
     public int[][] terrain;
@@ -27,14 +28,14 @@ public class Jeu {
     }
 
 
-    public boolean peutannuler(){
+    public boolean peutAnnuler(){
         return true;
 
     }
     public void refaire(){
 
     }
-    public boolean peutrefaire(){
+    public boolean peutRefaire(){
         return true;
 
     }

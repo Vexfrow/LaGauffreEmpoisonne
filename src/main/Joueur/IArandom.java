@@ -7,12 +7,12 @@ import Jeu.Jeu;
 
 
 class IArandom extends Joueur {
-Random r;
+    Random r;
 
-IArandom(Jeu j){
-    super(j);
+    IArandom(Jeu j){
+        super(j);
 
-}
+    }
 
     @Override
     boolean elaboreCoup(){

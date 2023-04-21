@@ -1,5 +1,13 @@
 
+package Interface;
+
+
 import javax.swing.*;
+
+import Controlleur.Controleur;
+import Jeu.Coup;
+import Jeu.Jeu;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,9 +24,27 @@ public class demoFenetre implements Runnable {
 	private Color orange;
 	private int ligne;
 	private int colonne;
+	Controleur c;
 	JButton matrix[][];
 	JPanel p;
 
+	public demoFenetre(int x, int y){
+		this.ligne = x;
+		this.colonne = y;
+		this.orange = new Color(250, 180, 50);
+		this.matrix = new JButton[this.ligne][this.colonne];
+		try{
+			SwingUtilities.invokeAndWait(this);
+		}catch(Exception e){
+			System.out.println("Marche pas");
+		}
+		
+	}
+
+	public demoFenetre(Jeu j, Controleur c){
+		this(j.nbligne, j.nbcolonne);
+		this.c = c;
+	}
 
 
 	public void run() {
@@ -58,14 +84,15 @@ public class demoFenetre implements Runnable {
 	}
 
 
-
 	//Mets à jour le terrain selon un tableau de char représentant le niveau
-	public void majNiveau(char[][] niveau){
+	public void majNiveau(int[][] niveau){
 		for(int i = 0; i < ligne; i++){
 			for(int j=0; j < colonne; j++){
 				if(i == 0 && j ==0){
-					;
+					System.out.println("i :" +i + ": j :"+ j);
 				}else{
+					System.out.println("i :" +i + ": j :"+ j);
+					//System.out.println(matrix[i][j]);
 					if(niveau[i][j] == 1){
 						matrix[i][j].setBackground(new Color(255, 255, 255));
 						matrix[i][j].setEnabled(false);
@@ -73,24 +100,17 @@ public class demoFenetre implements Runnable {
 						matrix[i][j].setBackground(orange);
 						matrix[i][j].setEnabled(true);
 					}
-
+					System.out.println(matrix[i][j].isEnabled());
 				}
-
 			}
 		}
 	}
 
 
-	public demoFenetre(int x, int y){
-		this.ligne = x;
-		this.colonne = y;
-		this.orange = new Color(250, 180, 50);
-
-	}
 
 
 	public static void main(String[] args){
-		SwingUtilities.invokeLater(new demoFenetre(5, 5));
+		new demoFenetre(5, 5);
 
 	}
 
@@ -191,28 +211,47 @@ public class demoFenetre implements Runnable {
 
 	public void initGaufre(JFrame jframe) {
 		p = new JPanel();
-
-		this.matrix = new JButton[this.ligne][this.colonne];
 		p.setLayout(new GridLayout(ligne, colonne, 0, 0));
 		for(int i = 0; i < ligne; i++){
 			for(int j=0; j < colonne; j++){
-				JButton b = new JButton();
+				JButton b = new JButton();				
 				if(i == 0 && j ==0){
 					b.setBackground(new Color(10, 240, 10));
 				}else{
 					b.setBackground(orange);
 				}
+				b.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent a){
+						c.joue(coupTable(b));
+						System.out.println("Clicked");
+					}
+				});
 				matrix[i][j] = b;
+				//System.out.println(matrix[i][j]);
+				
 				p.add(b);
 
 			}
 		}
-
 		jframe.add(p);
-
-
 	}
 
+
+	private Coup coupTable(JButton b){
+		int i =0;
+		int j =0;
+		boolean bl = false;
+		while(i < this.ligne && !bl){
+			j = 0;
+			while(j < this.colonne && !bl){
+				bl = b.equals(matrix[i][j]);
+				j++;
+			}
+			i++;
+		}
+		return new Coup(i-1, j-1);
+	}
 
 
 	public void chargerFichier(){
@@ -264,6 +303,8 @@ public class demoFenetre implements Runnable {
 
 	}
 
+
+	
 
 
 }
