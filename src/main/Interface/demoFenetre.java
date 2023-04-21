@@ -3,6 +3,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.nio.file.Path;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class demoFenetre implements Runnable {
 
@@ -24,14 +29,31 @@ public class demoFenetre implements Runnable {
 		// Un clic sur le bouton de fermeture clos l'application
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		// On fixe la taille et on démarre
-		frame.setSize(500, 300);
+		// On fixe la taille et on demarre
+		frame.setSize(530, 300);
+		frame.setMinimumSize(new Dimension(530, 300));
 		frame.setVisible(true);
+
+
 
 		//On initialise les différentes parties de l'interface
 		initBarMenu(frame);
 		initHistorique(frame);
 		initGaufre(frame);
+
+		frame.addComponentListener(new ComponentAdapter() {
+
+			public void componentResized(ComponentEvent e){
+				if(frame.getWidth()< frame.getJMenuBar().getMinimumSize().getWidth()){
+					frame.setSize(new Dimension((int)frame.getMinimumSize().getWidth(), (int)frame.getSize().getHeight()));
+				}
+
+				if(frame.getHeight()< frame.getJMenuBar().getMinimumSize().getHeight()){
+					frame.setSize(new Dimension( (int)frame.getSize().getWidth(),(int)frame.getMinimumSize().getHeight()));
+				}
+			}
+		});
+
 
 	}
 
@@ -100,7 +122,7 @@ public class demoFenetre implements Runnable {
 		buttonChargerP.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Clique sur le bouton \"Charger Partie\" ");
+				chargerFichier();
 			}
 		});
 
@@ -139,6 +161,7 @@ public class demoFenetre implements Runnable {
 
 	public void initHistorique(JFrame jframe) {
 		//Box contenant l'historique et l'information sur le tour actuel
+
 		Box menuLateralDroite = new Box(BoxLayout.Y_AXIS);
 		menuLateralDroite.setBackground(Color.getHSBColor(204, 100, 81));
 
@@ -158,7 +181,6 @@ public class demoFenetre implements Runnable {
 		listeCoups.setLayoutOrientation(JList.VERTICAL);
 		listeCoups.setVisibleRowCount(-1);
 		listeCoups.setBackground(Color.getHSBColor(204, 100, 81));
-
 		menuLateralDroite.add(listeCoups,BorderLayout.CENTER);
 
 
@@ -190,6 +212,58 @@ public class demoFenetre implements Runnable {
 
 
 	}
+
+
+
+	public void chargerFichier(){
+
+		JFrame jf = new JFrame();
+
+		File repertoireSauvegarde = new File(System.getProperty("user.dir")+"/rsc/sauvegarde/");
+		File[] listeFile = repertoireSauvegarde.listFiles();
+
+		JList<File> listeFichiers = new JList<>(listeFile);
+
+
+
+		Box boxSud = new Box(BoxLayout.X_AXIS);
+
+		Button boutonOpen = new Button("Open");
+		Button boutonClose = new Button("Close");
+
+		boutonOpen.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				File fichierChoisi = listeFichiers.getSelectedValue();
+				if(fichierChoisi != null){
+					System.out.println("Fichier choisi = " + fichierChoisi.getAbsolutePath());
+					//Appel à la fonction modifier jeu avec le fichier choisi
+				}
+			}
+		});
+
+		boutonClose.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
+			}
+		});
+
+		boxSud.add(boutonOpen);
+		boxSud.add(boutonClose);
+
+
+		jf.add(boxSud, BorderLayout.SOUTH);
+		jf.add(listeFichiers, BorderLayout.CENTER);
+
+
+		// On fixe la taille et on démarre
+		jf.setSize(500, 300);
+		jf.setVisible(true);
+
+
+	}
+
 
 
 }
