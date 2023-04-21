@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.nio.file.Path;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class demoFenetre implements Runnable {
 
@@ -27,14 +29,31 @@ public class demoFenetre implements Runnable {
 		// Un clic sur le bouton de fermeture clos l'application
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		// On fixe la taille et on démarre
-		frame.setSize(500, 300);
+		// On fixe la taille et on demarre
+		frame.setSize(530, 300);
+		frame.setMinimumSize(new Dimension(530, 300));
 		frame.setVisible(true);
+
+
 
 		//On initialise les différentes parties de l'interface
 		initBarMenu(frame);
 		initHistorique(frame);
 		initGaufre(frame);
+
+		frame.addComponentListener(new ComponentAdapter() {
+
+			public void componentResized(ComponentEvent e){
+				if(frame.getWidth()< frame.getJMenuBar().getMinimumSize().getWidth()){
+					frame.setSize(new Dimension((int)frame.getMinimumSize().getWidth(), (int)frame.getSize().getHeight()));
+				}
+
+				if(frame.getHeight()< frame.getJMenuBar().getMinimumSize().getHeight()){
+					frame.setSize(new Dimension( (int)frame.getSize().getWidth(),(int)frame.getMinimumSize().getHeight()));
+				}
+			}
+		});
+
 
 	}
 
@@ -161,7 +180,6 @@ public class demoFenetre implements Runnable {
 		listeCoups.setLayoutOrientation(JList.VERTICAL);
 		listeCoups.setVisibleRowCount(-1);
 		listeCoups.setBackground(Color.getHSBColor(204, 100, 81));
-
 		menuLateralDroite.add(listeCoups,BorderLayout.CENTER);
 
 
