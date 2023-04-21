@@ -12,9 +12,13 @@ public class demoFenetre implements Runnable {
 	JButton matrix[][];
 	JFrame frame;
 	JPanel p;
+
+
+
 	public void run() {
 		// Creation d'une fenetre
 		JFrame frame = new JFrame("La gaufre empoisonée");
+
 
 		// Un clic sur le bouton de fermeture clos l'application
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,7 +82,7 @@ public class demoFenetre implements Runnable {
 		jmb.add(buttonRestaurerC);
 
 		frame.setJMenuBar(jmb);
-
+		System.out.println(jmb.getMargin().left);
 
 		//---------------Fin du code pour le menu -------------------
 
@@ -110,37 +114,12 @@ public class demoFenetre implements Runnable {
 
 
 
+
 		frame.add(menuLateralDroite, BorderLayout.EAST);
-		frame.add(p);
 
-	}
+		//---------------Fin du code pour l'Historique -------------------
+		//---------------Debut du code pour le terrain--------------------
 
-	public void majNiveau(char[][] niveau){
-		for(int i = 0; i < ligne; i++){
-			for(int j=0; j < colonne; j++){
-				if(i == 0 && j ==0){
-					;
-				}else{
-					if(niveau[i][j] == 1){
-						System.out.println("Sortie :"+ i + " " + j);
-						matrix[i][j].setBackground(new Color(255, 255, 255));
-						matrix[i][j].setEnabled(false);
-					}else{
-						matrix[i][j].setBackground(orange);
-						matrix[i][j].setEnabled(true);
-					}
-
-				}
-
-			}
-		}
-	}
-
-	public demoFenetre(int x, int y){
-		this.ligne = x;
-		this.colonne = y;
-		this.orange = new Color(250, 180, 50);
-		frame = new JFrame("La gaufre empoisonée");
 		p = new JPanel();
 
 		this.matrix = new JButton[this.ligne][this.colonne];
@@ -158,11 +137,46 @@ public class demoFenetre implements Runnable {
 
 			}
 		}
+		frame.add(menuLateralDroite, BorderLayout.EAST);
+		frame.add(p);
+
+		//---------------Fin du code pour le terrain de jeu ----------------
+
 	}
 
 
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new demoFenetre(10,10));
+
+	//Mets à jour le terrain selon un tableau de char représentant le niveau
+	public void majNiveau(char[][] niveau){
+		for(int i = 0; i < ligne; i++){
+			for(int j=0; j < colonne; j++){
+				if(i == 0 && j ==0){
+					;
+				}else{
+					if(niveau[i][j] == 1){
+						matrix[i][j].setBackground(new Color(255, 255, 255));
+						matrix[i][j].setEnabled(false);
+					}else{
+						matrix[i][j].setBackground(orange);
+						matrix[i][j].setEnabled(true);
+					}
+
+				}
+
+			}
+		}
+	}
+
+	public demoFenetre(int x, int y){
+		this.ligne = x;
+		this.colonne = y;
+		this.orange = new Color(250, 180, 50);
+
+	}
+
+	public static void main(String args[]){
+		SwingUtilities.invokeLater(new demoFenetre(5, 5));
+
 	}
 
 
