@@ -3,6 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class demoFenetre implements Runnable {
 
@@ -24,8 +26,9 @@ public class demoFenetre implements Runnable {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// On fixe la taille et on demarre
-		frame.setSize(500, 300);
+		frame.setSize(520, 300);
 		frame.setVisible(true);
+		
 
 		//---------------Code pour le menu situé en haut -------------------
 		JMenuBar jmb = new JMenuBar();
@@ -80,9 +83,19 @@ public class demoFenetre implements Runnable {
 		jmb.add(buttonSauvegarderP);
 		jmb.add(buttonAnnulerC);
 		jmb.add(buttonRestaurerC);
+		int minWidth = listeNouvellePartie.getWidth() + buttonChargerP.getWidth() + buttonSauvegarderP.getWidth() + buttonAnnulerC.getWidth() + buttonRestaurerC.getWidth();
+		
+
 
 		frame.setJMenuBar(jmb);
-		System.out.println(jmb.getMargin().left);
+		frame.addComponentListener(new ComponentAdapter() {
+			public void componentResized(ComponentEvent e){
+				if(frame.getWidth() < minWidth){
+					frame.setSize(minWidth, frame.getHeight());
+				}
+			}
+		});
+		
 
 		//---------------Fin du code pour le menu -------------------
 
@@ -130,7 +143,7 @@ public class demoFenetre implements Runnable {
 		frame.add(p);
 
 		//---------------Fin du code pour le terrain de jeu ----------------
-
+		
 	}
 
 
