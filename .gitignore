@@ -2,6 +2,8 @@ LaGauffreEmpoisonne.iml
 out/
 .project
 *.class
+out/
+.metadata/
 .gitignore
 .idea/
 .metadata/
