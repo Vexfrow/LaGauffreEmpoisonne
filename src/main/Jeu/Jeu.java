@@ -54,7 +54,7 @@ Jeu(int nbligne, int nbcolonne){
     }
 
 
-    // name du fichier*
+    // nom du fichier*
     public void sauvegarde(String name){
 
 

@@ -158,6 +158,7 @@ public class demoFenetre implements Runnable {
 
 	public void initHistorique(JFrame jframe) {
 		//Box contenant l'historique et l'information sur le tour actuel
+
 		Box menuLateralDroite = new Box(BoxLayout.Y_AXIS);
 		menuLateralDroite.setBackground(Color.getHSBColor(204, 100, 81));
 

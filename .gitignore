@@ -3,3 +3,5 @@ LaGauffreEmpoisonne.iml
 ./.idea/*
 .project
 *.class
+out/
+.metadata/
