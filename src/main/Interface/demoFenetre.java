@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.nio.file.Path;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -17,29 +16,35 @@ public class demoFenetre implements Runnable {
 	private int ligne;
 	private int colonne;
 	JButton matrix[][];
-	JPanel p;
+	JPanel panelGaufre;
+	JMenuBar barMenu;
+	JPanel panelHistorique;
+
+
+
+
 
 
 
 	public void run() {
 		// Creation d'une fenetre
-		JFrame frame = new JFrame("La gaufre empoisonée");
-
+		JFrame frame = new JFrame("La gaufre empoisonnée");
 
 		// Un clic sur le bouton de fermeture clos l'application
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		// On fixe la taille et on demarre
+		// On fixe la taille et on démarre
 		frame.setSize(530, 300);
 		frame.setMinimumSize(new Dimension(530, 300));
-		frame.setVisible(true);
-
 
 
 		//On initialise les différentes parties de l'interface
 		initBarMenu(frame);
 		initHistorique(frame);
 		initGaufre(frame);
+
+		frame.pack();
+		frame.setVisible(true);
 
 		frame.addComponentListener(new ComponentAdapter() {
 
@@ -63,9 +68,7 @@ public class demoFenetre implements Runnable {
 	public void majNiveau(char[][] niveau){
 		for(int i = 0; i < ligne; i++){
 			for(int j=0; j < colonne; j++){
-				if(i == 0 && j ==0){
-					;
-				}else{
+				if(i != 0 || j !=0){
 					if(niveau[i][j] == 1){
 						matrix[i][j].setBackground(new Color(255, 255, 255));
 						matrix[i][j].setEnabled(false);
@@ -97,7 +100,7 @@ public class demoFenetre implements Runnable {
 
 
 	public void initBarMenu(JFrame jframe){
-		JMenuBar jmb = new JMenuBar();
+		barMenu = new JMenuBar();
 
 		//Menu "Nouvelle Partie"
 		JMenu listeNouvellePartie = new JMenu("Nouvelle Partie");
@@ -147,26 +150,38 @@ public class demoFenetre implements Runnable {
 			}
 		});
 
-		jmb.add(listeNouvellePartie);
-		jmb.add(buttonChargerP);
-		jmb.add(buttonSauvegarderP);
-		jmb.add(buttonAnnulerC);
-		jmb.add(buttonRestaurerC);
+		barMenu.add(listeNouvellePartie);
+		barMenu.add(buttonChargerP);
+		barMenu.add(buttonSauvegarderP);
+		barMenu.add(buttonAnnulerC);
+		barMenu.add(buttonRestaurerC);
 
 		//Rajout du menu au jframe
-		jframe.setJMenuBar(jmb);
+		jframe.setJMenuBar(barMenu);
 	}
 
 
 
-	public void initHistorique(JFrame jframe) {
-		//Box contenant l'historique et l'information sur le tour actuel
-		Box menuLateralDroite = new Box(BoxLayout.Y_AXIS);
-		menuLateralDroite.setBackground(Color.getHSBColor(204, 100, 81));
+	public void initHistorique(JFrame mainPanel) {
+
+		SpringLayout layoutMenu = new SpringLayout();
+
+		//Panel contenant l'historique et l'information sur le tour actuel
+		panelHistorique = new JPanel(layoutMenu);
+		Dimension dim = new Dimension(mainPanel.getWidth()/3, mainPanel.getHeight());
+		panelHistorique.setPreferredSize(dim);
+
+
 
 		//Information sur le tour actuel
-		Label texteJoueur = new Label("C'est au tour du joueur X");
-		menuLateralDroite.add(texteJoueur, BorderLayout.NORTH);
+		JTextArea texteJoueur = new JTextArea("C'est au tour du joueur X");
+		texteJoueur.setRows(1);
+		texteJoueur.setEditable(false);
+
+		//Separator
+		JSeparator separator = new JSeparator();
+		separator.setPreferredSize(new Dimension(panelHistorique.getWidth(), 5));
+		separator.setBackground(Color.getHSBColor(0, 0, 0));
 
 		//Historique de la partie
 		DefaultListModel<String> model = new DefaultListModel<>();
@@ -175,24 +190,48 @@ public class demoFenetre implements Runnable {
 		model.addElement("Test3");
 
 		JList<String> listeCoups = new JList<>(model);
-		listeCoups.setName("Historique des coups");
+		JTextArea titreHistorique = new JTextArea("Historique des coups");
+		titreHistorique.setRows(1);
+		titreHistorique.setEditable(false);
+
 		listeCoups.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		listeCoups.setLayoutOrientation(JList.VERTICAL);
 		listeCoups.setVisibleRowCount(-1);
-		listeCoups.setBackground(Color.getHSBColor(204, 100, 81));
-		menuLateralDroite.add(listeCoups,BorderLayout.CENTER);
 
 
-		jframe.add(menuLateralDroite, BorderLayout.EAST);
+		layoutMenu.putConstraint(SpringLayout.NORTH, texteJoueur, 10, SpringLayout.NORTH, panelHistorique);
+		layoutMenu.putConstraint(SpringLayout.WEST, texteJoueur, 10, SpringLayout.WEST, panelHistorique);
+		layoutMenu.putConstraint(SpringLayout.EAST, texteJoueur, 10, SpringLayout.EAST, panelHistorique);
+
+		layoutMenu.putConstraint(SpringLayout.NORTH, separator, 10, SpringLayout.SOUTH, texteJoueur);
+
+		layoutMenu.putConstraint(SpringLayout.NORTH, titreHistorique, 10, SpringLayout.SOUTH, separator);
+		layoutMenu.putConstraint(SpringLayout.WEST, titreHistorique, 10, SpringLayout.WEST, panelHistorique);
+		layoutMenu.putConstraint(SpringLayout.EAST, titreHistorique, 10, SpringLayout.EAST, panelHistorique);
+
+		layoutMenu.putConstraint(SpringLayout.NORTH, listeCoups, 10, SpringLayout.SOUTH, titreHistorique);
+		layoutMenu.putConstraint(SpringLayout.WEST, listeCoups, 10, SpringLayout.WEST, panelHistorique);
+		layoutMenu.putConstraint(SpringLayout.EAST, listeCoups, 10, SpringLayout.EAST, panelHistorique);
+
+		panelHistorique.add(texteJoueur,SpringLayout.NORTH);
+		panelHistorique.add(separator);
+		panelHistorique.add(titreHistorique,SpringLayout.NORTH);
+		panelHistorique.add(listeCoups,SpringLayout.NORTH);
+
+
+		panelHistorique.setBorder(BorderFactory.createLineBorder(Color.red));
+
+		mainPanel.add(panelHistorique, SpringLayout.EAST);
+
 	}
 
 
 
-	public void initGaufre(JFrame jframe) {
-		p = new JPanel();
+	public void initGaufre(JFrame mainPanel) {
+		panelGaufre = new JPanel();
 
 		this.matrix = new JButton[this.ligne][this.colonne];
-		p.setLayout(new GridLayout(ligne, colonne, 0, 0));
+		panelGaufre.setLayout(new GridLayout(ligne, colonne, 1, 1));
 		for(int i = 0; i < ligne; i++){
 			for(int j=0; j < colonne; j++){
 				JButton b = new JButton();
@@ -202,12 +241,12 @@ public class demoFenetre implements Runnable {
 					b.setBackground(orange);
 				}
 				matrix[i][j] = b;
-				p.add(b);
+				panelGaufre.add(b);
 
 			}
 		}
 
-		jframe.add(p);
+		mainPanel.add(panelGaufre);
 
 
 	}
@@ -236,7 +275,8 @@ public class demoFenetre implements Runnable {
 				File fichierChoisi = listeFichiers.getSelectedValue();
 				if(fichierChoisi != null){
 					System.out.println("Fichier choisi = " + fichierChoisi.getAbsolutePath());
-					//Appel à la fonction modifier jeu avec le fichier choisi
+					jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
+					//Appel à la fonction "modifier jeu" avec le fichier choisi
 				}
 			}
 		});
