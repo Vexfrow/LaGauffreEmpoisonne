@@ -16,6 +16,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class demoFenetre implements Runnable {
 
@@ -151,7 +153,7 @@ public class demoFenetre implements Runnable {
 		buttonSauvegarderP.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				c.sauvegarder();
+				save();
 			}
 		});
 
@@ -314,6 +316,7 @@ public class demoFenetre implements Runnable {
 				File fichierChoisi = listeFichiers.getSelectedValue();
 				if(fichierChoisi != null){
 					System.out.println("Fichier choisi = " + fichierChoisi.getAbsolutePath());
+					c.load(fichierChoisi.getAbsolutePath());
 					jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
 					//Appel à la fonction "modifier jeu" avec le fichier choisi
 				}
@@ -343,5 +346,27 @@ public class demoFenetre implements Runnable {
 	}
 
 
+	public void save(){
+		JFrame jf = new JFrame();
+		JTextField text = new JTextField(1);
+		Box b = new Box(BoxLayout.X_AXIS);
+		text.addKeyListener(new KeyListener() {
+
+			public void keyTyped(KeyEvent e){}
+			public void keyReleased(KeyEvent e){}
+			@Override
+			public void keyPressed(KeyEvent e){
+				char ch = e.getKeyChar();
+				if(ch == '\n'){
+					c.sauvegarder(text.getText());
+					jf.dispose();
+				}
+			}
+		});
+		b.add(text);
+		jf.add(b);
+		jf.setSize(100,100);
+		jf.setVisible(true);
+	}
 
 }

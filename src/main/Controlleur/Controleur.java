@@ -18,6 +18,7 @@ public class Controleur{
     private static final int PVP = 1;
     private static final int PVE = 2;
     private static final int EVE = 3;
+    private static final String DIRECTORY = "./rsc/sauvegarde/";
 
     private Joueur p1;
     private Joueur p2;
@@ -74,10 +75,14 @@ public class Controleur{
         this.window.majNiveau(j.terrain);
     }
 
-    public void sauvegarder(){
-        
+    public void sauvegarder(String fileName){
+        j.sauvegarde(DIRECTORY + fileName);
         System.out.println("Sauvegarde appuyé");
     }
 
+    public void load(String fichier){
+        j.charger(fichier);
+        this.window.majNiveau(j.terrain);
+    }
 
 }
