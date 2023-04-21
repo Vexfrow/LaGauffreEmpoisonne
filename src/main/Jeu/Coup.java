@@ -16,4 +16,9 @@ public class Coup {
         return cp;
     }
 
+
+    @Override
+    public String toString() {
+        return "Ligne = " + l + " ; Colonne = " +c;
+    }
 }

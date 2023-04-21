@@ -28,11 +28,11 @@ public class Jeu {
     		//init des arrays
     		coupAnnule = new ArrayList<Coup>();
         	coupJoue = new ArrayList<Coup>();
-    		
+
         	//ouverture fichier
     		FileReader reader = new FileReader(fichier);
     		BufferedReader bufferedReader = new BufferedReader(reader);
-    		
+
     		String line;
 
             //recuperer le joueur courant
@@ -42,41 +42,41 @@ public class Jeu {
     		//recuperer le nombre de ligne
     		line = bufferedReader.readLine();
     		nbligne = Integer.parseInt(line);
-    		
+
     		//recuperer le nombre de collone
     		line = bufferedReader.readLine();
     		nbcolonne = Integer.parseInt(line);
-    		
+
     		//creation terrain
     		terrain = new int[nbligne][nbcolonne];
-    		
+
     		//recuprer tous les coups à jouer
     		while ((line = bufferedReader.readLine()) != null && (!line.equals("b"))) {
 
     				//split la ligne
     				String[] parts = line.split(" ");
-    				
+
     				//creer un nouveau coup
     				Coup cp = new Coup(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
-    				
+
     				//jouer le coup
     				joue(cp);
-    	        
+
     	    }
-    		
+
     		//recuprere les dernieres lignes du fichier
     		while ((line = bufferedReader.readLine()) != null && (!line.equals("b"))) {
-				
+
     			//split les lignes
 				String[] parts = line.split(" ");
 				//definir un nouveau  coup
 				Coup cp = new Coup(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
-				
+
 				//ajoute le coup à l'arraylist
 				coupAnnule.add(cp);
-	        
+
 	    }
-    		
+
     		//fermer le fichier
     		reader.close();
 
@@ -189,7 +189,7 @@ public class Jeu {
                 joueurCourant = 1;
             }
         }
-        
+
 
     }
 
@@ -227,37 +227,37 @@ public class Jeu {
     public void sauvegarde(String name){
 
         try {
-    		
+
 			FileWriter w = new FileWriter(name);
 			
             //stockage des diffferentes valeurs
             w.write(joueurCourant + "\n");
 			w.write(nbligne + "\n");
 			w.write(nbcolonne + "\n");
-			
+
 			//stocker tous les coups joués
 			int tailleList = coupJoue.size();
-			
+
 			//stock tous les coups
 			for(int i = 0; i< tailleList; i++) {
 				w.write(coupJoue.get(i).l + " "+ coupJoue.get(i).c + "\n");
 			}
-			
+
 			//marque pour indiquer que la suite sont des coups annules
 			w.write("b\n");
-			
+
 			//stocker tous les coups annules
 			int tailleLista = coupAnnule.size();
 			for(int i = 0; i< tailleLista; i++) {
 				w.write(coupAnnule.get(i).l + " "+ coupAnnule.get(i).c + "\n");
 			}
-			
+
 			//fermer le fichier
 			w.close();
-			
+
 		} catch (IOException e) {
 			System.out.print("Erreur : " + e);
-			
+
 		}
 
     }
@@ -284,63 +284,70 @@ public class Jeu {
 
 public void charger(String fichier){
         try {
-    		
+
     		//init des arrays
     		coupAnnule = new ArrayList<Coup>();
         	coupJoue = new ArrayList<Coup>();
-    		
+
         	//ouverture fichier
     		FileReader reader = new FileReader(fichier);
     		BufferedReader bufferedReader = new BufferedReader(reader);
-    		
+
     		String line;
-    		
+
     		//recuperer le nombre de ligne
     		line = bufferedReader.readLine();
     		nbligne = Integer.parseInt(line);
-    		
+
     		//recuperer le nombre de collone
     		line = bufferedReader.readLine();
     		nbcolonne = Integer.parseInt(line);
-    		
+
     		//creation terrain
     		terrain = new int[nbligne][nbcolonne];
-    		
+
     		//recuprer tous les coups à jouer
     		while ((line = bufferedReader.readLine()) != null && (!line.equals("b"))) {
 
     				//split la ligne
     				String[] parts = line.split(" ");
-    				
+
     				//creer un nouveau coup
     				Coup cp = new Coup(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
-    				
+
     				//jouer le coup
     				joue(cp);
-    	        
+
     	    }
-    		
+
     		//recuprere les dernieres lignes du fichier
     		while ((line = bufferedReader.readLine()) != null && (!line.equals("b"))) {
-				
+
     			//split les lignes
 				String[] parts = line.split(" ");
 				//definir un nouveau  coup
 				Coup cp = new Coup(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
-				
+
 				//ajoute le coup à l'arraylist
 				coupAnnule.add(cp);
-	        
+
 	    }
-    		
+
     		//fermer le fichier
     		reader.close();
-    		
+
 		} catch (IOException e) {
 			System.out.print("Erreur : " + e);
-			
+
 		}
     }
+
+    public ArrayList<Coup> getCoupJoue(){
+        return coupJoue;
+    }
+
+
+
 
 
 

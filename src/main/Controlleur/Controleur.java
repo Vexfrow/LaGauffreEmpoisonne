@@ -58,6 +58,7 @@ public class Controleur{
     public void joue(Coup c){
         this.j.joue(c);
         this.window.majNiveau(j.terrain);
+        this.window.majHistorique(j.getCoupJoue());
         System.out.println(j);
     }
 
