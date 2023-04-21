@@ -11,14 +11,14 @@ public class Jeu {
     private ArrayList<Coup> coupAnnule;
 
     // Construire le jeu via une sauvegarde
-    Jeu(String fichier){
+    public Jeu(String fichier){
 
     }
 
-Jeu(int nbligne, int nbcolonne){
-    terrain = new int[nbligne][nbcolonne];
-    this.nbligne = nbligne;
-    this.nbcolonne = nbcolonne;
+    public Jeu(int nbligne, int nbcolonne){
+        terrain = new int[nbligne][nbcolonne];
+        this.nbligne = nbligne;
+        this.nbcolonne = nbcolonne;
 
     }
 
