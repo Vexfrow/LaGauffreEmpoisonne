@@ -1,9 +1,12 @@
+package Jeu;
+
+
 import java.util.ArrayList;
 
 public class Jeu {
-    public char[][] terrain;
-    private int nbligne;
-    private int nbcolonne;
+    public int[][] terrain;
+    public int nbligne;
+    public int nbcolonne;
     private ArrayList<Coup> coupJoue;
     private ArrayList<Coup> coupAnnule;
 
@@ -13,7 +16,7 @@ Jeu(String fichier){
 }
 
 Jeu(int nbligne, int nbcolonne){
-    terrain = new char[nbligne][nbcolonne];
+    terrain = new int[nbligne][nbcolonne];
     this.nbligne = nbligne;
     this.nbcolonne = nbcolonne;
 
@@ -55,7 +58,9 @@ public void joue(Coup cp){
 public void sauvegarde(String name){
 
 
-} 
+}
+
+
 
 
 
