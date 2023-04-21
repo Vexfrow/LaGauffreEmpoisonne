@@ -1,0 +1,5 @@
+./out/*
+LaGauffreEmpoisonne.iml
+./.idea/*
+.project
+*.class
