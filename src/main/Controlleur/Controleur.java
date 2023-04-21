@@ -36,5 +36,15 @@ public class Controleur{
         joue(new Coup(x,y));
     }
 
+    public void annule(){
+        this.j.annule();
+        this.window.majNiveau(j.terrain);
+    }
+
+    public void rejoue(){
+        this.j.refaire();
+        this.window.majNiveau(j.terrain);
+    }
+
 
 }

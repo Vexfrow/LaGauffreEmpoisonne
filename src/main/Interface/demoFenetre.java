@@ -107,13 +107,10 @@ public class demoFenetre implements Runnable {
 	}
 
 
-
-
 	public static void main(String[] args){
 		new demoFenetre(5, 5);
 
 	}
-
 
 
 	public void initBarMenu(JFrame jframe){
@@ -156,6 +153,7 @@ public class demoFenetre implements Runnable {
 		buttonAnnulerC.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				c.annule();
 				System.out.println("Clique sur le bouton \"Annuler Coup\" ");
 			}
 		});
@@ -163,6 +161,7 @@ public class demoFenetre implements Runnable {
 		buttonRestaurerC.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				c.rejoue();
 				System.out.println("Clique sur le bouton \"Restaurer Coup\" ");
 			}
 		});
@@ -176,7 +175,6 @@ public class demoFenetre implements Runnable {
 		//Rajout du menu au jframe
 		jframe.setJMenuBar(jmb);
 	}
-
 
 
 	public void initHistorique(JFrame jframe) {
@@ -206,7 +204,6 @@ public class demoFenetre implements Runnable {
 
 		jframe.add(menuLateralDroite, BorderLayout.EAST);
 	}
-
 
 
 	public void initGaufre(JFrame jframe) {
