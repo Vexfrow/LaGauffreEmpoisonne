@@ -1,6 +1,9 @@
 
 import Jeu.Jeu;
 import Jeu.Coup;
+import Joueur.Etat;
+import java.util.Arrays;
+
 public class newMain {
 
 
@@ -20,6 +23,7 @@ public class newMain {
         System.out.println("");
 
 
+
         System.out.println(" joue en 1,0");
         cp = new Coup(1,0);
         j.joue(cp);
@@ -28,11 +32,13 @@ public class newMain {
         System.out.println("");
 
 
+
         System.out.println("j'annule");
         j.annule();
         System.out.println(j);
         System.out.println("");
         System.out.println("");
+
 
 
         System.out.println("j'annule");
@@ -52,6 +58,9 @@ public class newMain {
         System.out.println(j);
         System.out.println("");
         System.out.println("");
+
+
+
 
 
 
