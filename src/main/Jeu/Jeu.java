@@ -70,7 +70,7 @@ public class Jeu {
 
     }
 
-    
+
     public void joue(Coup cp){
         int l = cp.l;
         int c = cp.c;
@@ -107,7 +107,7 @@ public class Jeu {
     public void sauvegarde(String name){
 
 
-}
+    }
 
 	public String toString() {
 		String result = "Plateau:\n[";
