@@ -14,11 +14,17 @@ public class Jeu {
     private ArrayList<Coup> coupJoue;
     private ArrayList<Coup> coupAnnule;
 
+    private boolean jeuEnCours;
+    private int joueurCourant;
+
     // Construire le jeu via une sauvegarde
     Jeu(String fichier){
 
         try {
     		
+            //dire que le jeu commence
+            jeuEnCours = true;
+
     		//init des arrays
     		coupAnnule = new ArrayList<Coup>();
         	coupJoue = new ArrayList<Coup>();
@@ -28,6 +34,10 @@ public class Jeu {
     		BufferedReader bufferedReader = new BufferedReader(reader);
     		
     		String line;
+
+            //recuperer le joueur courant
+    		line = bufferedReader.readLine();
+    		joueurCourant = Integer.parseInt(line);
     		
     		//recuperer le nombre de ligne
     		line = bufferedReader.readLine();
@@ -69,10 +79,14 @@ public class Jeu {
     		
     		//fermer le fichier
     		reader.close();
+
+
+            //joueur courant
+
+
     		
 		} catch (IOException e) {
 			System.out.print("Erreur : " + e);
-			
 		}
     }
 
@@ -82,6 +96,9 @@ public class Jeu {
         this.nbcolonne = nbcolonne;
         coupAnnule = new ArrayList<Coup>();
         coupJoue = new ArrayList<Coup>();
+
+        jeuEnCours = true;
+        joueurCourant = 1;
 
     }
 
@@ -100,7 +117,12 @@ public class Jeu {
 
         }
 
-        
+        //changemetn du joueur
+        if(joueurCourant == 1){
+            joueurCourant = 1;
+        } else {
+            joueurCourant = 2;
+        }
 
     }
 
@@ -118,37 +140,56 @@ public class Jeu {
             coupAnnule.remove(coupAnnule.size()-1);
         }
 
+
+        //changemetn du joueur
+        if(joueurCourant == 1){
+            joueurCourant = 1;
+        } else {
+            joueurCourant = 2;
+        }
+
     }
 
 
     public boolean peutRefaire(){
+
         if (coupAnnule.size() < 1){
             return false;
         }else{
             return true;
         }
-
-
     }
 
     
     public void joue(Coup cp){
         int l = cp.l;
         int c = cp.c;
-        if (getCase(l,c) != 1) {
+        if (jeuEnCours && l>=0 && l <=nbligne && c<= nbcolonne && c>=0 && getCase(l,c) != 1) {
             while( l < this.nbligne){
-            c= cp.c;
-            while(c < this.nbcolonne){
-                terrain[l][c] = 1;
-                c++;
+                c= cp.c;
+                while(c < this.nbcolonne){
+                    terrain[l][c] = 1;
+                    c++;
+                }
+                l++;
             }
-            l++;
-        }
-        coupJoue.add(cp);
-        coupAnnule = new ArrayList<Coup>();
+            coupJoue.add(cp);
+            coupAnnule = new ArrayList<Coup>();
+
+
+            //mettre à jour en cours si fin
+		    if(terrain[0][0] == 1) {
+		    	jeuEnCours = false;
+		    }
+
+            //changment joueur courant
+            if(joueurCourant == 1){
+                joueurCourant = 2;
+            } else {
+                joueurCourant = 1;
+            }
         }
         
-
 
     }
 
@@ -156,24 +197,41 @@ public class Jeu {
     public void joueAnnuler(Coup cp){
         int l = cp.l;
         int c = cp.c;
-        while( l < this.nbligne){
-            c= cp.c;
-            while(c < this.nbcolonne){
-                terrain[l][c] = 1;
-                c++;
+        if (jeuEnCours && getCase(l,c) != 1 && l>=0 && l <=nbligne && c<= nbcolonne && c>=0) {
+            while( l < this.nbligne){
+                c= cp.c;
+                while(c < this.nbcolonne){
+                    terrain[l][c] = 1;
+                    c++;
+                }
+                l++;
             }
-            l++;
-        }
         }
 
+        //mettre à jour en cours si fin
+		if(terrain[0][0] == 1) {
+		    jeuEnCours = false;
+		}
 
-    // nom du fichier*
+        //changemetn du joueur
+        if(joueurCourant == 1){
+            joueurCourant = 2;
+        } else {
+            joueurCourant = 1;
+        }
+            
+    }
+
+
+    // nom du fichier
     public void sauvegarde(String name){
 
         try {
     		
 			FileWriter w = new FileWriter(name);
 			
+            //stockage des diffferentes valeurs
+            w.write(joueurCourant + "\n");
 			w.write(nbligne + "\n");
 			w.write(nbcolonne + "\n");
 			
@@ -217,9 +275,14 @@ public class Jeu {
 			sep = "\n ";
 		}
 		result += 	"]\nEtat:" +
+                "\n- Jeu en cours ? : " + jeuEnCours +
+                "\n- Joueur courant : " + joueurCourant +
 				"\n- peut annuler : " + peutAnnuler() +
 				"\n- peut refaire : " + peutRefaire();
 		return result;
 	}
+
+
+
 
 }
