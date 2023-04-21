@@ -6,6 +6,7 @@ package Controlleur;
 import Jeu.Coup;
 import Jeu.Jeu;
 import Joueur.Human;
+import Joueur.IArandom;
 import Joueur.Joueur;
 import Interface.demoFenetre;
 
@@ -25,13 +26,27 @@ public class Controleur{
     public Controleur(Jeu j){
         this.j = j;
         this.type = Controleur.PVP;
-        p1 = new Human(j);
-        p2 = new Human(j);
+        
         
     }
 
     public void choseType(int t){
         this.type = t;
+        switch(this.type){
+            case PVP:
+                p1 = new Human(j);
+                p2 = new Human(j);
+                break;
+            case PVE:
+                p1 = new Human(j);
+                p2 = new IArandom(j);
+                break;
+            case EVE:
+                p1 = new IArandom(j);
+                p2 = new IArandom(j);
+                break;
+        }
+
     }
 
 
@@ -57,6 +72,11 @@ public class Controleur{
     public void rejoue(){
         this.j.refaire();
         this.window.majNiveau(j.terrain);
+    }
+
+    public void sauvegarder(){
+        
+        System.out.println("Sauvegarde appuyé");
     }
 
 

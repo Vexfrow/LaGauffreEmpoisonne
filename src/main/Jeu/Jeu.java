@@ -2,7 +2,6 @@ package Jeu;
 
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Jeu {
     public int[][] terrain;
@@ -12,16 +11,16 @@ public class Jeu {
     private ArrayList<Coup> coupAnnule;
 
     // Construire le jeu via une sauvegarde
-    public Jeu(String fichier){
+    Jeu(String fichier){
 
     }
 
     public Jeu(int nbligne, int nbcolonne){
-        terrain = new int[nbligne][nbcolonne];
-        this.nbligne = nbligne;
-        this.nbcolonne = nbcolonne;
-        coupAnnule = new ArrayList<Coup>();
-        coupJoue = new ArrayList<Coup>();
+    terrain = new int[nbligne][nbcolonne];
+    this.nbligne = nbligne;
+    this.nbcolonne = nbcolonne;
+    coupAnnule = new ArrayList<Coup>();
+    coupJoue = new ArrayList<Coup>();
 
     }
 

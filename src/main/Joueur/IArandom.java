@@ -12,7 +12,7 @@ public class IArandom extends Joueur {
     public IArandom(Jeu j){
         super(j);
 
-    }
+}
 
     @Override
     boolean elaboreCoup(){
