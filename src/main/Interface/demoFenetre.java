@@ -8,11 +8,12 @@ import java.awt.event.ComponentEvent;
 
 public class demoFenetre implements Runnable {
 
+
+	//Revoir les attributs
 	private Color orange;
 	private int ligne;
 	private int colonne;
 	JButton matrix[][];
-	JFrame frame;
 	JPanel p;
 
 
@@ -26,124 +27,31 @@ public class demoFenetre implements Runnable {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// On fixe la taille et on demarre
-		frame.setSize(520, 300);
+		frame.setSize(530, 300);
+		frame.setMinimumSize(new Dimension(530, 300));
 		frame.setVisible(true);
 		
-
-		//---------------Code pour le menu situé en haut -------------------
-		JMenuBar jmb = new JMenuBar();
-
-		JMenu listeNouvellePartie = new JMenu("Nouvelle Partie");
-
-		JMenuItem buttonIAAleatoire = new JMenuItem("IA Aleatoire");
-		JMenuItem buttonHumain = new JMenuItem("Humain");
-		JMenuItem buttonIAGagnantPerdant = new JMenuItem("IA Coup Gagnant/Perdant");
-		JMenuItem buttonIAEtOu = new JMenuItem("IA ET/OU");
-
-		Button buttonChargerP = new Button("Charger partie");
-		Button buttonSauvegarderP = new Button("Sauvegarder partie");
-		Button buttonAnnulerC = new Button("Annuler Coup");
-		Button buttonRestaurerC = new Button("Restaurer Coup");
-
-		buttonChargerP.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Clique sur le bouton \"Charquer Partie\" ");
-			}
-		});
-
-		buttonSauvegarderP.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Clique sur le bouton \"Sauvegarder Partie\" ");
-			}
-		});
-
-		buttonAnnulerC.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Clique sur le bouton \"Annuler Coup\" ");
-			}
-		});
-
-		buttonRestaurerC.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Clique sur le bouton \"Restaurer Coup\" ");
-			}
-		});
-
-		listeNouvellePartie.add(buttonHumain);
-		listeNouvellePartie.add(buttonIAAleatoire);
-		listeNouvellePartie.add(buttonIAGagnantPerdant);
-		listeNouvellePartie.add(buttonIAEtOu);
-
-		jmb.add(listeNouvellePartie);
-		jmb.add(buttonChargerP);
-		jmb.add(buttonSauvegarderP);
-		jmb.add(buttonAnnulerC);
-		jmb.add(buttonRestaurerC);
-		int minWidth = listeNouvellePartie.getWidth() + buttonChargerP.getWidth() + buttonSauvegarderP.getWidth() + buttonAnnulerC.getWidth() + buttonRestaurerC.getWidth();
 		
 
+		//On initialise les différentes parties de l'interface
+		initBarMenu(frame);
+		initHistorique(frame);
+		initGaufre(frame);
 
-		frame.setJMenuBar(jmb);
 		frame.addComponentListener(new ComponentAdapter() {
+			
 			public void componentResized(ComponentEvent e){
-				if(frame.getWidth() < minWidth){
-					frame.setSize(minWidth, frame.getHeight());
+				if(frame.getWidth()< frame.getJMenuBar().getMinimumSize().getWidth()){
+					frame.setSize(new Dimension((int)frame.getMinimumSize().getWidth(), (int)frame.getSize().getHeight()));
+				}
+
+				if(frame.getHeight()< frame.getJMenuBar().getMinimumSize().getHeight()){
+					frame.setSize(new Dimension( (int)frame.getSize().getWidth(),(int)frame.getMinimumSize().getHeight()));
 				}
 			}
 		});
 		
 
-		//---------------Fin du code pour le menu -------------------
-
-
-
-		Box menuLateralDroite = new Box(BoxLayout.Y_AXIS);
-
-		Label texteJoueur = new Label("C'est au tour du joueur X");
-		menuLateralDroite.add(texteJoueur, BorderLayout.PAGE_START);
-
-		JTextArea listeCoup = new JTextArea("Historique des coups :\n");
-		listeCoup.setEditable(false);
-		JScrollPane historiqueCoup = new JScrollPane(listeCoup);
-		menuLateralDroite.add(historiqueCoup);
-
-		listeCoup.setBackground(Color.getHSBColor(204, 100, 81));
-		menuLateralDroite.setBackground(Color.getHSBColor(204, 100, 81));
-		historiqueCoup.setBackground(Color.getHSBColor(204, 100, 81));
-
-
-
-
-		frame.add(menuLateralDroite, BorderLayout.LINE_END);
-
-		//---------------Fin du code pour l'Historique -------------------
-		//---------------Debut du code pour le terrain--------------------
-
-		p = new JPanel();
-
-		this.matrix = new JButton[this.ligne][this.colonne];
-		p.setLayout(new GridLayout(ligne, colonne, 0, 0));
-		for(int i = 0; i < ligne; i++){
-			for(int j=0; j < colonne; j++){
-				JButton b = new JButton();
-				if(i == 0 && j ==0){
-					b.setBackground(new Color(10, 240, 10));
-				}else{
-					b.setBackground(orange);
-				}
-				matrix[i][j] = b;
-				p.add(b);
-
-			}
-		}
-		frame.add(p);
-
-		//---------------Fin du code pour le terrain de jeu ----------------
-		
 	}
 
 
@@ -169,18 +77,137 @@ public class demoFenetre implements Runnable {
 		}
 	}
 
+
 	public demoFenetre(int x, int y){
 		this.ligne = x;
 		this.colonne = y;
 		this.orange = new Color(250, 180, 50);
-		
+
 	}
 
-	public static void main(String args[]){
+
+	public static void main(String[] args){
 		SwingUtilities.invokeLater(new demoFenetre(5, 5));
-		
+
 	}
 
+
+
+	public void initBarMenu(JFrame jframe){
+		JMenuBar jmb = new JMenuBar();
+
+		//Menu "Nouvelle Partie"
+		JMenu listeNouvellePartie = new JMenu("Nouvelle Partie");
+		//Boutons du menu "Nouvelle Partie"
+		JMenuItem buttonIAAleatoire = new JMenuItem("IA Aleatoire");
+		JMenuItem buttonHumain = new JMenuItem("Humain");
+		JMenuItem buttonIAGagnantPerdant = new JMenuItem("IA Coup Gagnant/Perdant");
+		JMenuItem buttonIAEtOu = new JMenuItem("IA ET/OU");
+
+		listeNouvellePartie.add(buttonHumain);
+		listeNouvellePartie.add(buttonIAAleatoire);
+		listeNouvellePartie.add(buttonIAGagnantPerdant);
+		listeNouvellePartie.add(buttonIAEtOu);
+
+
+		//Les autres boutons du menu
+		Button buttonChargerP = new Button("Charger partie");
+		Button buttonSauvegarderP = new Button("Sauvegarder partie");
+		Button buttonAnnulerC = new Button("Annuler Coup");
+		Button buttonRestaurerC = new Button("Restaurer Coup");
+
+		buttonChargerP.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Clique sur le bouton \"Charger Partie\" ");
+			}
+		});
+
+		buttonSauvegarderP.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Clique sur le bouton \"Sauvegarder Partie\" ");
+			}
+		});
+
+		buttonAnnulerC.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Clique sur le bouton \"Annuler Coup\" ");
+			}
+		});
+
+		buttonRestaurerC.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Clique sur le bouton \"Restaurer Coup\" ");
+			}
+		});
+
+		jmb.add(listeNouvellePartie);
+		jmb.add(buttonChargerP);
+		jmb.add(buttonSauvegarderP);
+		jmb.add(buttonAnnulerC);
+		jmb.add(buttonRestaurerC);
+
+		//Rajout du menu au jframe
+		jframe.setJMenuBar(jmb);
+	}
+
+
+
+	public void initHistorique(JFrame jframe) {
+		//Box contenant l'historique et l'information sur le tour actuel
+		Box menuLateralDroite = new Box(BoxLayout.Y_AXIS);
+		menuLateralDroite.setBackground(Color.getHSBColor(204, 100, 81));
+
+		//Information sur le tour actuel
+		Label texteJoueur = new Label("C'est au tour du joueur X");
+		menuLateralDroite.add(texteJoueur, BorderLayout.NORTH);
+
+		//Historique de la partie
+		DefaultListModel<String> model = new DefaultListModel<>();
+		model.addElement("Test1");
+		model.addElement("Test2");
+		model.addElement("Test3");
+
+		JList<String> listeCoups = new JList<>(model);
+		listeCoups.setName("Historique des coups");
+		listeCoups.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		listeCoups.setLayoutOrientation(JList.VERTICAL);
+		listeCoups.setVisibleRowCount(-1);
+		listeCoups.setBackground(Color.getHSBColor(204, 100, 81));
+		menuLateralDroite.add(listeCoups,BorderLayout.CENTER);
+
+
+		jframe.add(menuLateralDroite, BorderLayout.EAST);
+	}
+
+
+
+	public void initGaufre(JFrame jframe) {
+		p = new JPanel();
+
+		this.matrix = new JButton[this.ligne][this.colonne];
+		p.setLayout(new GridLayout(ligne, colonne, 0, 0));
+		for(int i = 0; i < ligne; i++){
+			for(int j=0; j < colonne; j++){
+				JButton b = new JButton();
+				if(i == 0 && j ==0){
+					b.setBackground(new Color(10, 240, 10));
+				}else{
+					b.setBackground(orange);
+				}
+				matrix[i][j] = b;
+				p.add(b);
+
+			}
+		}
+
+		jframe.add(p);
+
+
+	}
 
 
 }
