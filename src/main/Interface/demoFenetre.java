@@ -82,26 +82,35 @@ public class demoFenetre implements Runnable {
 
 		//---------------Fin du code pour le menu -------------------
 
-
+		//---------------Code pour la liste des coups -------------------
 
 		Box menuLateralDroite = new Box(BoxLayout.Y_AXIS);
 
 		Label texteJoueur = new Label("C'est au tour du joueur X");
-		menuLateralDroite.add(texteJoueur, BorderLayout.PAGE_START);
+		menuLateralDroite.add(texteJoueur, BorderLayout.NORTH);
 
-		JTextArea listeCoup = new JTextArea("Historique des coups :\n");
-		listeCoup.setEditable(false);
-		JScrollPane historiqueCoup = new JScrollPane(listeCoup);
-		menuLateralDroite.add(historiqueCoup);
 
-		listeCoup.setBackground(Color.getHSBColor(204, 100, 81));
+		DefaultListModel<String> model = new DefaultListModel<>();
+		model.addElement("Test1");
+		model.addElement("Test2");
+		model.addElement("Test3");
+
+		JList<String> listeCoups = new JList<>(model);
+		listeCoups.setName("Historique des coups");
+		listeCoups.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		listeCoups.setLayoutOrientation(JList.VERTICAL);
+		listeCoups.setVisibleRowCount(-1);
+
+
+		menuLateralDroite.add(listeCoups,BorderLayout.CENTER);
+
+		listeCoups.setBackground(Color.getHSBColor(204, 100, 81));
+
 		menuLateralDroite.setBackground(Color.getHSBColor(204, 100, 81));
-		historiqueCoup.setBackground(Color.getHSBColor(204, 100, 81));
 
 
 
-
-		frame.add(menuLateralDroite, BorderLayout.LINE_END);
+		frame.add(menuLateralDroite, BorderLayout.EAST);
 		frame.add(p);
 
 	}
@@ -149,6 +158,11 @@ public class demoFenetre implements Runnable {
 
 			}
 		}
+	}
+
+
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new demoFenetre(10,10));
 	}
 
 
