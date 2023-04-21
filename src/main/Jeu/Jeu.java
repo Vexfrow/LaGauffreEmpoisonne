@@ -160,7 +160,7 @@ public class Jeu {
         }
     }
 
-
+    
     public void joue(Coup cp){
         int l = cp.l;
         int c = cp.c;
@@ -282,7 +282,7 @@ public class Jeu {
 		return result;
 	}
 
-    public void charger(String fichier){
+public void charger(String fichier){
         try {
     		
     		//init des arrays
@@ -341,8 +341,6 @@ public class Jeu {
 			
 		}
     }
-
-
 
 
 
