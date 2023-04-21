@@ -60,6 +60,19 @@ public class Jeu {
 
 }
 
+	public String toString() {
+		String result = "Plateau:\n[";
+		String sep = "";
+		for (int i=0; i<terrain.length; i++) {
+			result += sep + Arrays.toString(terrain[i]);
+			sep = "\n ";
+		}
+		result += 	"]\nEtat:" +
+				"\n- peut annuler : " + peutAnnuler() +
+				"\n- peut refaire : " + peutRefaire();
+		return result;
+	}
+
 
 
 
