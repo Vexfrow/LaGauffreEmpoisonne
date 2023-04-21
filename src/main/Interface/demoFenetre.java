@@ -60,7 +60,7 @@ public class demoFenetre implements Runnable {
 
 
 	//Mets à jour le terrain selon un tableau de char représentant le niveau
-	public void majNiveau(char[][] niveau){
+	public void majNiveau(int[][] niveau){
 		for(int i = 0; i < ligne; i++){
 			for(int j=0; j < colonne; j++){
 				if(i == 0 && j ==0){
