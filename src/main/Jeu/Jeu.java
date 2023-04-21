@@ -123,6 +123,11 @@ public class Jeu {
 	}
 
 
+    public ArrayList<Coup> getCoupJoue(){
+        return coupJoue;
+    }
+
+
 
 
 
