@@ -15,7 +15,7 @@ public class Jeu {
 
     }
 
-Jeu(int nbligne, int nbcolonne){
+    public Jeu(int nbligne, int nbcolonne){
     terrain = new int[nbligne][nbcolonne];
     this.nbligne = nbligne;
     this.nbcolonne = nbcolonne;
@@ -28,11 +28,12 @@ Jeu(int nbligne, int nbcolonne){
         if(peutAnnuler()){
             Jeu jeu = new Jeu(nbligne,nbcolonne);
             int i = 0;
-            coupAnnule.add(coupJoue.get(coupJoue.size()));
-            coupJoue.remove(coupJoue.size());
+            coupAnnule.add(coupJoue.get(coupJoue.size()-1));
+            coupJoue.remove(coupJoue.size()-1);
 
             while( i < coupJoue.size()){
                 jeu.joue(coupJoue.get(i));
+                i++;
             }
             this.terrain = jeu.terrain;
 
@@ -48,7 +49,7 @@ Jeu(int nbligne, int nbcolonne){
     }
 
 
-    public void Refaire(){
+    public void refaire(){
         if(peutRefaire()){
             Coup cp = coupAnnule.get(coupAnnule.size()-1);
             joueAnnuler(coupAnnule.get(coupAnnule.size()-1));
@@ -77,6 +78,7 @@ Jeu(int nbligne, int nbcolonne){
             }
             l++;
         }
+        coupJoue.add(cp);
         coupAnnule = new ArrayList<Coup>();
 
 
