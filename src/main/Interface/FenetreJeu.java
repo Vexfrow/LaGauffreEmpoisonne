@@ -6,126 +6,105 @@ import javax.swing.*;
 import Controlleur.Controleur;
 import Jeu.Coup;
 import Jeu.Jeu;
+import Vue.AdaptateurSouris;
+import Vue.CollecteurEvenements;
+import Vue.GaufreGraphique;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-public class demoFenetre implements Runnable {
+public class FenetreJeu implements Runnable {
+
+	//-----UTILS-----
+	CollecteurEvenements controleur;
+	Jeu jeu;
+
+	//---------------
 
 
-	//Revoir les attributs
-	private final Color orange;
-	private final int ligne;
-	private final int colonne;
-	Controleur c;
-	JButton[][] matrix;
-	JPanel panelGaufre;
+	//----SWING COMPONENT-----
+	JFrame mainFrame;
 	JMenuBar barMenu;
+	JMenu listeNouvellePartie;
+	JMenuItem buttonIAAleatoire;
+	JMenuItem buttonHumain;
+	JMenuItem buttonIAGagnantPerdant;
+	JMenuItem buttonIAEtOu;
+
+	Button buttonChargerP;
+	Button buttonSauvegarderP;
+	Button buttonAnnulerC;
+	Button buttonRestaurerC;
+
 	JPanel panelHistorique;
+	JPanel panelGaufre;
+
+	GaufreGraphique gaufreGraphique;
+	JTextArea infoJoueur;
 
 	DefaultListModel<String> model;
 
 
 
-	public demoFenetre(int x, int y){
-		this.ligne = x;
-		this.colonne = y;
-		this.orange = new Color(250, 180, 50);
-		this.matrix = new JButton[this.ligne][this.colonne];
-		try{
-			SwingUtilities.invokeAndWait(this);
-		}catch(Exception e){
-			System.out.println("Marche pas");
-		}
-		
+	public FenetreJeu(Jeu j, CollecteurEvenements ce){
+		barMenu = null;
+		panelHistorique = null;
+		panelGaufre = null;
+
+		controleur = ce;
+		controleur.ajouteInterface(this);
+		jeu = j;
+		model = null;
 	}
 
-	public demoFenetre(Jeu j, Controleur c){
-		this(j.nbligne, j.nbcolonne);
-		this.c = c;
+
+	public static void demarrer(Jeu j, Controleur c){
+		try{
+			SwingUtilities.invokeAndWait(new FenetreJeu(j, c));
+		} catch (InvocationTargetException e) {
+			e.getTargetException().printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 
 	public void run() {
 		// Creation d'une fenêtre
-		JFrame frame = new JFrame("La gaufre empoisonnée");
-
-		// Un clic sur le bouton de fermeture clos l'application
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame = new JFrame("La gaufre empoisonnée");
 
 		// On fixe la taille et on démarre
-		frame.setSize(530, 300);
-		frame.setMinimumSize(new Dimension(530, 300));
+		mainFrame.setSize(530, 300);
+		mainFrame.setMinimumSize(new Dimension(530, 300));
 
 
 		//On initialise les différentes parties de l'interface
-		initBarMenu(frame);
-		initHistorique(frame);
-		initGaufre(frame);
+		initBarMenu();
+		initHistorique();
+		initGaufre();
 
-		frame.pack();
-		frame.setVisible(true);
-
-		frame.addComponentListener(new ComponentAdapter() {
-
-			public void componentResized(ComponentEvent e){
-				if(frame.getWidth()< frame.getJMenuBar().getMinimumSize().getWidth()){
-					frame.setSize(new Dimension((int)frame.getMinimumSize().getWidth(), (int)frame.getSize().getHeight()));
-				}
-
-				if(frame.getHeight()< frame.getJMenuBar().getMinimumSize().getHeight()){
-					frame.setSize(new Dimension( (int)frame.getSize().getWidth(),(int)frame.getMinimumSize().getHeight()));
-				}
-			}
-		});
-
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setVisible(true);
 
 	}
 
 
 
-	//Mets à jour le terrain selon un tableau de char représentant le niveau
-	public void majNiveau(int[][] niveau){
-		for(int i = 0; i < ligne; i++){
-			for(int j=0; j < colonne; j++){
-				if(i == 0 && j ==0){
-					System.out.println("i :" +i + ": j :"+ j);
-				}else{
-					System.out.println("i :" +i + ": j :"+ j);
-					//System.out.println(matrix[i][j]);
-					if(niveau[i][j] == 1){
-						matrix[i][j].setBackground(new Color(255, 255, 255));
-						matrix[i][j].setEnabled(false);
-					}else{
-						matrix[i][j].setBackground(orange);
-						matrix[i][j].setEnabled(true);
-					}
-					System.out.println(matrix[i][j].isEnabled());
-				}
 
-			}
-		}
-	}
-
-
-	public void initBarMenu(JFrame jframe){
+	//Fonction pour initialiser la bar situé en haut de la fenêtre de jeu
+	public void initBarMenu(){
 		barMenu = new JMenuBar();
 
 		//Menu "Nouvelle Partie"
-		JMenu listeNouvellePartie = new JMenu("Nouvelle Partie");
+		listeNouvellePartie = new JMenu("Nouvelle Partie");
 		//Boutons du menu "Nouvelle Partie"
-		JMenuItem buttonIAAleatoire = new JMenuItem("IA Aléatoire");
-		JMenuItem buttonHumain = new JMenuItem("Humain");
-		JMenuItem buttonIAGagnantPerdant = new JMenuItem("IA Coup Gagnant/Perdant");
-		JMenuItem buttonIAEtOu = new JMenuItem("IA ET/OU");
+		buttonIAAleatoire = new JMenuItem("IA Aléatoire");
+		buttonHumain = new JMenuItem("Humain");
+		buttonIAGagnantPerdant = new JMenuItem("IA Coup Gagnant/Perdant");
+		buttonIAEtOu = new JMenuItem("IA ET/OU");
 
 		listeNouvellePartie.add(buttonHumain);
 		listeNouvellePartie.add(buttonIAAleatoire);
@@ -134,10 +113,10 @@ public class demoFenetre implements Runnable {
 
 
 		//Les autres boutons du menu
-		Button buttonChargerP = new Button("Charger partie");
-		Button buttonSauvegarderP = new Button("Sauvegarder partie");
-		Button buttonAnnulerC = new Button("Annuler Coup");
-		Button buttonRestaurerC = new Button("Restaurer Coup");
+		buttonChargerP = new Button("Charger partie");
+		buttonSauvegarderP = new Button("Sauvegarder partie");
+		buttonAnnulerC = new Button("Annuler Coup");
+		buttonRestaurerC = new Button("Restaurer Coup");
 
 		buttonChargerP.addActionListener(new ActionListener() {
 			@Override
@@ -156,16 +135,14 @@ public class demoFenetre implements Runnable {
 		buttonAnnulerC.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				c.annule();
-				System.out.println("Clique sur le bouton \"Annuler Coup\" ");
+				controleur.traiterCommande("annule", null);
 			}
 		});
 
 		buttonRestaurerC.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				c.rejoue();
-				System.out.println("Clique sur le bouton \"Restaurer Coup\" ");
+				controleur.traiterCommande("rejoue", null);
 			}
 		});
 
@@ -176,26 +153,28 @@ public class demoFenetre implements Runnable {
 		barMenu.add(buttonRestaurerC);
 
 		//Rajout du menu au jframe
-		jframe.setJMenuBar(barMenu);
+		mainFrame.setJMenuBar(barMenu);
 	}
 
 
 
-	public void initHistorique(JFrame mainPanel) {
+
+	//Fonction pour initialiser le menu situé sur la droite de la fenêtre de jeu
+	public void initHistorique() {
 
 		SpringLayout layoutMenu = new SpringLayout();
 
 		//Panel contenant l'historique et l'information sur le tour actuel
 		panelHistorique = new JPanel(layoutMenu);
-		Dimension dim = new Dimension(mainPanel.getWidth()/3, mainPanel.getHeight());
+		Dimension dim = new Dimension(mainFrame.getWidth()/3, mainFrame.getHeight());
 		panelHistorique.setPreferredSize(dim);
 
 
 
 		//Information sur le tour actuel
-		JTextArea texteJoueur = new JTextArea("C'est au tour du joueur X");
-		texteJoueur.setRows(1);
-		texteJoueur.setEditable(false);
+		infoJoueur = new JTextArea("C'est au tour du joueur n°"+jeu.joueurCourant);
+		infoJoueur.setRows(1);
+		infoJoueur.setEditable(false);
 
 		//Separator
 		JSeparator separator = new JSeparator();
@@ -215,11 +194,11 @@ public class demoFenetre implements Runnable {
 		listeCoups.setVisibleRowCount(-1);
 
 
-		layoutMenu.putConstraint(SpringLayout.NORTH, texteJoueur, 10, SpringLayout.NORTH, panelHistorique);
-		layoutMenu.putConstraint(SpringLayout.WEST, texteJoueur, 10, SpringLayout.WEST, panelHistorique);
-		layoutMenu.putConstraint(SpringLayout.EAST, texteJoueur, 10, SpringLayout.EAST, panelHistorique);
+		layoutMenu.putConstraint(SpringLayout.NORTH, infoJoueur, 10, SpringLayout.NORTH, panelHistorique);
+		layoutMenu.putConstraint(SpringLayout.WEST, infoJoueur, 10, SpringLayout.WEST, panelHistorique);
+		layoutMenu.putConstraint(SpringLayout.EAST, infoJoueur, 10, SpringLayout.EAST, panelHistorique);
 
-		layoutMenu.putConstraint(SpringLayout.NORTH, separator, 10, SpringLayout.SOUTH, texteJoueur);
+		layoutMenu.putConstraint(SpringLayout.NORTH, separator, 10, SpringLayout.SOUTH, infoJoueur);
 
 		layoutMenu.putConstraint(SpringLayout.NORTH, titreHistorique, 10, SpringLayout.SOUTH, separator);
 		layoutMenu.putConstraint(SpringLayout.WEST, titreHistorique, 10, SpringLayout.WEST, panelHistorique);
@@ -229,7 +208,7 @@ public class demoFenetre implements Runnable {
 		layoutMenu.putConstraint(SpringLayout.WEST, listeCoups, 10, SpringLayout.WEST, panelHistorique);
 		layoutMenu.putConstraint(SpringLayout.EAST, listeCoups, 10, SpringLayout.EAST, panelHistorique);
 
-		panelHistorique.add(texteJoueur,SpringLayout.NORTH);
+		panelHistorique.add(infoJoueur,SpringLayout.NORTH);
 		panelHistorique.add(separator);
 		panelHistorique.add(titreHistorique,SpringLayout.NORTH);
 		panelHistorique.add(listeCoups,SpringLayout.NORTH);
@@ -237,55 +216,37 @@ public class demoFenetre implements Runnable {
 
 		panelHistorique.setBorder(BorderFactory.createLineBorder(Color.red));
 
-		mainPanel.add(panelHistorique, SpringLayout.EAST);
+		mainFrame.add(panelHistorique, SpringLayout.EAST);
 
 	}
 
 
-	public void initGaufre(JFrame jframe) {
-		panelGaufre = new JPanel();
-		panelGaufre.setLayout(new GridLayout(ligne, colonne, 0, 0));
-		for(int i = 0; i < ligne; i++){
-			for(int j=0; j < colonne; j++){
-				JButton b = new JButton();				
-				if(i == 0 && j ==0){
-					b.setBackground(new Color(10, 240, 10));
-				}else{
-					b.setBackground(orange);
-				}
-				b.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent a){
-						c.joue(coupTable(b));
-						System.out.println("Clicked");
-					}
-				});
-				matrix[i][j] = b;
-				//System.out.println(matrix[i][j]);
 
-				panelGaufre.add(b);
+	//Fonction pour initialiser la gaufre
+	public void initGaufre() {
+		panelGaufre = new JPanel(new CardLayout());
+		gaufreGraphique = new GaufreGraphique(jeu);
+		panelGaufre.add(gaufreGraphique);
+		panelGaufre.setVisible(true);
+		gaufreGraphique.addMouseListener(new AdaptateurSouris(gaufreGraphique, controleur));
+		mainFrame.add(panelGaufre);
+	}
 
-			}
+
+	//Fonction pour mettre à jour la fenêtre
+	public void maj(){
+		panelGaufre.repaint();
+		if(jeu.jeuEnCours)
+			infoJoueur.setText("C'est au tour du joueur n°"+jeu.joueurCourant);
+		else{
+			JOptionPane.showMessageDialog(mainFrame, "Victoire du joueur n°"+jeu.joueurCourant);
 		}
-		jframe.add(panelGaufre);
+
+		buttonAnnulerC.setEnabled(jeu.peutAnnuler());
+		buttonRestaurerC.setEnabled(jeu.peutRefaire());
+
+
 	}
-
-
-	private Coup coupTable(JButton b){
-		int i =0;
-		int j =0;
-		boolean bl = false;
-		while(i < this.ligne && !bl){
-			j = 0;
-			while(j < this.colonne && !bl){
-				bl = b.equals(matrix[i][j]);
-				j++;
-			}
-			i++;
-		}
-		return new Coup(i-1, j-1);
-	}
-
 
 	public void chargerFichier(){
 
@@ -309,7 +270,7 @@ public class demoFenetre implements Runnable {
 				File fichierChoisi = listeFichiers.getSelectedValue();
 				if(fichierChoisi != null){
 					System.out.println("Fichier choisi = " + fichierChoisi.getAbsolutePath());
-					c.load(fichierChoisi.getAbsolutePath());
+					controleur.traiterCommande("charger", fichierChoisi.getAbsolutePath());
 					jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
 					//Appel à la fonction "modifier jeu" avec le fichier choisi
 				}
@@ -343,6 +304,8 @@ public class demoFenetre implements Runnable {
 		JFrame jf = new JFrame();
 		JTextField text = new JTextField(1);
 		Box b = new Box(BoxLayout.X_AXIS);
+
+		//TODO : refaire cette partie
 		text.addKeyListener(new KeyListener() {
 
 			public void keyTyped(KeyEvent e){}
@@ -351,7 +314,7 @@ public class demoFenetre implements Runnable {
 			public void keyPressed(KeyEvent e){
 				char ch = e.getKeyChar();
 				if(ch == '\n'){
-					c.sauvegarder(text.getText());
+					controleur.traiterCommande("sauvegarde",text.getText());
 					jf.dispose();
 				}
 			}

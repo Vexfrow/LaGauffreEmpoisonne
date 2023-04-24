@@ -1,19 +1,17 @@
-
 package Controlleur;
-
-
 
 import Jeu.Coup;
 import Jeu.Jeu;
 import Joueur.Human;
 import Joueur.IArandom;
 import Joueur.Joueur;
-import Interface.demoFenetre;
+import Interface.FenetreJeu;
+import Vue.CollecteurEvenements;
 
 
-public class Controleur{
-    private demoFenetre window;
-    private Jeu j;
+public class Controleur implements CollecteurEvenements {
+    private FenetreJeu window;
+    public Jeu j;
     private int type;
     private static final int PVP = 1;
     private static final int PVE = 2;
@@ -27,8 +25,6 @@ public class Controleur{
     public Controleur(Jeu j){
         this.j = j;
         this.type = Controleur.PVP;
-        
-        
     }
 
     public void choseType(int t){
@@ -51,39 +47,65 @@ public class Controleur{
     }
 
 
-    public void ajouteNiv(demoFenetre d){
+    public void ajouteInterface(FenetreJeu d){
         this.window = d;
     }
 
     public void joue(Coup c){
         this.j.joue(c);
-        this.window.majNiveau(j.terrain);
-        this.window.majHistorique(j.getCoupJoue());
-        System.out.println(j);
+        this.window.maj();
     }
 
     public void generateCoup(int x, int y){
         joue(new Coup(x,y));
     }
 
-    public void annule(){
-        this.j.annule();
-        this.window.majNiveau(j.terrain);
-    }
 
     public void rejoue(){
         this.j.refaire();
-        this.window.majNiveau(j.terrain);
     }
 
     public void sauvegarder(String fileName){
         j.sauvegarde(DIRECTORY + fileName);
-        System.out.println("Sauvegarde appuyé");
     }
 
-    public void load(String fichier){
+    public void charger(String fichier){
         j.charger(fichier);
-        this.window.majNiveau(j.terrain);
+    }
+
+
+    public void annule(){
+        this.j.annule();
+    }
+
+
+
+    //-----Clique Souris-----
+    @Override
+    public void clicSouris(int l, int c) {
+        Coup coup = new Coup(l,c);
+        if(!j.peutJouer(coup)){
+            System.out.println("Ne peut pas jouer");
+        }else{
+            joue(coup);
+        }
+    }
+
+    //----------------------------
+
+
+    public void traiterCommande(String commande, String param){
+        if(commande.equals("annule")){
+            annule();
+        }else if(commande.equals("rejoue")){
+            rejoue();
+        }else if(commande.equals("sauvegarde")){
+            sauvegarder(param);
+        }else if(commande.equals("charger")){
+            charger(param);
+        }
+        this.window.maj();
+
     }
 
 }

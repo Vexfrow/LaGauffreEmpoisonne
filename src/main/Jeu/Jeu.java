@@ -14,8 +14,8 @@ public class Jeu {
     private ArrayList<Coup> coupJoue;
     private ArrayList<Coup> coupAnnule;
 
-    private boolean jeuEnCours;
-    private int joueurCourant;
+    public boolean jeuEnCours;
+    public int joueurCourant;
 
     // Construire le jeu via une sauvegarde
     Jeu(String fichier){
@@ -115,20 +115,22 @@ public class Jeu {
             }
             this.terrain = jeu.terrain;
 
+            jeuEnCours = true;
+            switchJoueur();
         }
+    }
 
-        //changemetn du joueur
+    private void switchJoueur(){
         if(joueurCourant == 1){
-            joueurCourant = 1;
-        } else {
             joueurCourant = 2;
+        } else {
+            joueurCourant = 1;
         }
-
     }
 
 
     public boolean peutAnnuler(){
-        return (!(coupJoue.size() < 1));
+        return (coupJoue.size() >= 1);
     }
 
 
@@ -138,29 +140,20 @@ public class Jeu {
             joueAnnuler(coupAnnule.get(coupAnnule.size()-1));
             coupJoue.add(cp);
             coupAnnule.remove(coupAnnule.size()-1);
-        }
-
-
-        //changemetn du joueur
-        if(joueurCourant == 1){
-            joueurCourant = 1;
-        } else {
-            joueurCourant = 2;
+            switchJoueur();
         }
 
     }
 
 
     public boolean peutRefaire(){
-
-        if (coupAnnule.size() < 1){
-            return false;
-        }else{
-            return true;
-        }
+        return coupAnnule.size() >= 1;
     }
 
-    
+
+    public boolean peutJouer(Coup c){
+        return (jeuEnCours && (c.c < nbcolonne && c.l < nbligne));
+    }
     public void joue(Coup cp){
         int l = cp.l;
         int c = cp.c;
@@ -182,22 +175,19 @@ public class Jeu {
 		    	jeuEnCours = false;
 		    }
 
-            //changment joueur courant
-            if(joueurCourant == 1){
-                joueurCourant = 2;
-            } else {
-                joueurCourant = 1;
-            }
+            switchJoueur();
         }
 
 
     }
 
 
+
+
     public void joueAnnuler(Coup cp){
         int l = cp.l;
         int c = cp.c;
-        if (jeuEnCours && getCase(l,c) != 1 && l>=0 && l <=nbligne && c<= nbcolonne && c>=0) {
+        if (jeuEnCours && getCase(l,c) != 1 && l>=0 && l <=nbligne && c<= nbcolonne && c>=0){
             while( l < this.nbligne){
                 c= cp.c;
                 while(c < this.nbcolonne){
@@ -206,18 +196,11 @@ public class Jeu {
                 }
                 l++;
             }
-        }
 
-        //mettre à jour en cours si fin
-		if(terrain[0][0] == 1) {
-		    jeuEnCours = false;
-		}
-
-        //changemetn du joueur
-        if(joueurCourant == 1){
-            joueurCourant = 2;
-        } else {
-            joueurCourant = 1;
+            //mettre à jour en cours si fin
+            if(terrain[0][0] == 1) {
+                jeuEnCours = false;
+            }
         }
             
     }
@@ -230,8 +213,7 @@ public class Jeu {
 
 			FileWriter w = new FileWriter(name);
 			
-            //stockage des diffferentes valeurs
-            w.write(joueurCourant + "\n");
+            //stockage des différentes valeurs
 			w.write(nbligne + "\n");
 			w.write(nbcolonne + "\n");
 
@@ -243,10 +225,10 @@ public class Jeu {
 				w.write(coupJoue.get(i).l + " "+ coupJoue.get(i).c + "\n");
 			}
 
-			//marque pour indiquer que la suite sont des coups annules
+			//marque pour indiquer que la suite sont des coups annulés
 			w.write("b\n");
 
-			//stocker tous les coups annules
+			//stocker tous les coups annulés
 			int tailleLista = coupAnnule.size();
 			for(int i = 0; i< tailleLista; i++) {
 				w.write(coupAnnule.get(i).l + " "+ coupAnnule.get(i).c + "\n");
@@ -262,7 +244,8 @@ public class Jeu {
 
     }
 
-    //pour recuprer le contenu de la case
+    //pour récupèrer le contenu de la case
+    //1 si case mangé, 0 sinon
     public int getCase(int i, int j) {
     	return terrain[i][j];
     }
@@ -295,11 +278,11 @@ public void charger(String fichier){
 
     		String line;
 
-    		//recuperer le nombre de ligne
+            //récupèrer le nombre de lignes
     		line = bufferedReader.readLine();
     		nbligne = Integer.parseInt(line);
 
-    		//recuperer le nombre de collone
+    		//récupèrer le nombre de colonnes
     		line = bufferedReader.readLine();
     		nbcolonne = Integer.parseInt(line);
 
@@ -312,7 +295,7 @@ public void charger(String fichier){
     				//split la ligne
     				String[] parts = line.split(" ");
 
-    				//creer un nouveau coup
+    				//créer un nouveau coup
     				Coup cp = new Coup(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
 
     				//jouer le coup
@@ -320,23 +303,23 @@ public void charger(String fichier){
 
     	    }
 
-    		//recuprere les dernieres lignes du fichier
+    		//récupère les dernières lignes du fichier
     		while ((line = bufferedReader.readLine()) != null && (!line.equals("b"))) {
 
     			//split les lignes
 				String[] parts = line.split(" ");
-				//definir un nouveau  coup
+				//définir un nouveau coup
 				Coup cp = new Coup(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
 
 				//ajoute le coup à l'arraylist
 				coupAnnule.add(cp);
-
 	    }
 
     		//fermer le fichier
     		reader.close();
 
-		} catch (IOException e) {
+
+        } catch (IOException e) {
 			System.out.print("Erreur : " + e);
 
 		}
