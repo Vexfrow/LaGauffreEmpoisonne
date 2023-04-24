@@ -17,20 +17,29 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class demoFenetre implements Runnable {
 
 
 	//Revoir les attributs
-	private final Color orange;
-	private final int ligne;
-	private final int colonne;
-	Controleur c;
-	JButton[][] matrix;
+	private Color orange;
+	private int ligne;
+	private int colonne;
+	public Controleur c;
+	JButton matrix[][];
 	JPanel panelGaufre;
 	JMenuBar barMenu;
 	JPanel panelHistorique;
 
+	public int getLigne(){
+		return this.ligne;
+	}
+
+	public int getColonne(){
+		return this.colonne;
+	}
 	DefaultListModel<String> model;
 
 
@@ -91,15 +100,12 @@ public class demoFenetre implements Runnable {
 	}
 
 
-
 	//Mets à jour le terrain selon un tableau de char représentant le niveau
 	public void majNiveau(int[][] niveau){
 		for(int i = 0; i < ligne; i++){
 			for(int j=0; j < colonne; j++){
 				if(i == 0 && j ==0){
-					System.out.println("i :" +i + ": j :"+ j);
 				}else{
-					System.out.println("i :" +i + ": j :"+ j);
 					//System.out.println(matrix[i][j]);
 					if(niveau[i][j] == 1){
 						matrix[i][j].setBackground(new Color(255, 255, 255));
@@ -108,7 +114,6 @@ public class demoFenetre implements Runnable {
 						matrix[i][j].setBackground(orange);
 						matrix[i][j].setEnabled(true);
 					}
-					System.out.println(matrix[i][j].isEnabled());
 				}
 
 			}
@@ -124,6 +129,22 @@ public class demoFenetre implements Runnable {
 		//Boutons du menu "Nouvelle Partie"
 		JMenuItem buttonIAAleatoire = new JMenuItem("IA Aléatoire");
 		JMenuItem buttonHumain = new JMenuItem("Humain");
+		buttonHumain.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				c.choseType(Controleur.PVP);
+				c.newGame(jframe);
+				
+			}
+		});
+
+		buttonIAAleatoire.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				c.choseType(Controleur.PVE);
+				c.newGame(jframe);
+				
+			}
+		});
+
 		JMenuItem buttonIAGagnantPerdant = new JMenuItem("IA Coup Gagnant/Perdant");
 		JMenuItem buttonIAEtOu = new JMenuItem("IA ET/OU");
 
@@ -178,7 +199,6 @@ public class demoFenetre implements Runnable {
 		//Rajout du menu au jframe
 		jframe.setJMenuBar(barMenu);
 	}
-
 
 
 	public void initHistorique(JFrame mainPanel) {
@@ -256,13 +276,15 @@ public class demoFenetre implements Runnable {
 				b.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent a){
-						c.joue(coupTable(b));
-						System.out.println("Clicked");
+						if(c.getType() == Controleur.PVE && !c.play){
+							;
+						}else{
+							c.joue(coupTable(b));
+						}
+						
 					}
 				});
 				matrix[i][j] = b;
-				//System.out.println(matrix[i][j]);
-
 				panelGaufre.add(b);
 
 			}
@@ -373,4 +395,57 @@ public class demoFenetre implements Runnable {
 
 
 
+	public void newGame(int x, int y, JFrame j){
+		this.ligne = x;
+		this.colonne = y;
+		this.matrix = new JButton[this.ligne][this.colonne];
+		j.remove(panelGaufre);
+		j.remove(panelHistorique);
+		initGaufre(j);
+		initHistorique(j);
+		panelGaufre.revalidate();
+		panelHistorique.revalidate();
+		barMenu.revalidate();
+		
+	}
+
+	public void newGameMenu(JFrame jframe){
+		JFrame jf = new JFrame("New Game");
+		jf.setMinimumSize(new Dimension(210, 100));
+		JPanel pane = new JPanel(new GridLayout(1, 3));
+		pane.setPreferredSize(new Dimension(200, 30));
+
+		SpinnerNumberModel sp1 = new SpinnerNumberModel(this.ligne, 1, 13, 1);
+		SpinnerNumberModel sp2 = new SpinnerNumberModel(this.colonne, 1, 13, 1);
+		JSpinner l = new JSpinner(sp1);
+		JSpinner c = new JSpinner(sp2);
+
+		JButton b = new JButton("New Game!");
+
+		l.setPreferredSize(new Dimension(50, 30));
+		c.setPreferredSize(new Dimension(50, 30));
+		b.setPreferredSize(new Dimension(200, 30));
+
+		Controleur d = this.c;
+		
+		b.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				jf.dispose();
+				newGame((Integer) sp1.getNumber(),(Integer)sp2.getNumber(), jframe);
+				d.newJeu();
+			}
+		});
+
+
+		pane.add(l);
+		pane.add(c);
+		pane.add(b);
+		jf.add(pane);
+		jf.setVisible(true);
+		
+	}
+
+	public JFrame getframe(){
+		return (JFrame) barMenu.getParent();
+	}
 }

@@ -13,6 +13,7 @@ public class Jeu {
     public int nbcolonne;
     private ArrayList<Coup> coupJoue;
     private ArrayList<Coup> coupAnnule;
+	private boolean lose;
 
     private boolean jeuEnCours;
     public int joueurCourant; //1 ou 2
