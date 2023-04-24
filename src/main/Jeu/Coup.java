@@ -1,7 +1,7 @@
 package Jeu;
 
 public class Coup {
-    int l,c;
+    public int l,c;
 
 
 
@@ -20,5 +20,14 @@ public class Coup {
     @Override
     public String toString() {
         return "Ligne = " + l + " ; Colonne = " +c;
+    }
+
+    public boolean estValide(int [][] cases){
+        if(cases[l][c]==0){
+            return true;
+        }else{
+            return false;
+        }
+
     }
 }

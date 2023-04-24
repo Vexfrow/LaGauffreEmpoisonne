@@ -69,6 +69,7 @@ public class FenetreJeu implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 
@@ -105,6 +106,20 @@ public class FenetreJeu implements Runnable {
 		buttonHumain = new JMenuItem("Humain");
 		buttonIAGagnantPerdant = new JMenuItem("IA Coup Gagnant/Perdant");
 		buttonIAEtOu = new JMenuItem("IA ET/OU");
+
+
+		buttonHumain.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				newGameMenu(Controleur.PVP);
+			}
+		});
+
+		buttonIAAleatoire.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				newGameMenu(Controleur.PVE);
+
+			}
+		});
 
 		listeNouvellePartie.add(buttonHumain);
 		listeNouvellePartie.add(buttonIAAleatoire);
@@ -336,4 +351,56 @@ public class FenetreJeu implements Runnable {
 
 
 
+	public void newGame(){
+
+		mainFrame.remove(panelGaufre);
+		mainFrame.remove(panelHistorique);
+		initGaufre();
+		initHistorique();
+
+		panelGaufre.revalidate();
+		panelHistorique.revalidate();
+		barMenu.revalidate();
+
+
+	}
+
+	public void newGameMenu(int type){
+		JFrame jf = new JFrame("New Game");
+		jf.setMinimumSize(new Dimension(210, 100));
+		JPanel pane = new JPanel(new GridLayout(1, 3));
+		pane.setPreferredSize(new Dimension(200, 30));
+
+		SpinnerNumberModel sp1 = new SpinnerNumberModel(jeu.nbligne, 1, 13, 1);
+		SpinnerNumberModel sp2 = new SpinnerNumberModel(jeu.nbcolonne, 1, 13, 1);
+		JSpinner l = new JSpinner(sp1);
+		JSpinner c = new JSpinner(sp2);
+
+		JButton b = new JButton("New Game!");
+
+		l.setPreferredSize(new Dimension(50, 30));
+		c.setPreferredSize(new Dimension(50, 30));
+		b.setPreferredSize(new Dimension(200, 30));
+
+		b.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				jf.dispose();
+				controleur.newJeu(type,(Integer)sp1.getNumber(),(Integer)sp2.getNumber());
+				jeu = controleur.getJeu();
+				newGame();
+			}
+		});
+
+
+		pane.add(l);
+		pane.add(c);
+		pane.add(b);
+		jf.add(pane);
+		jf.setVisible(true);
+
+	}
+
+	public JFrame getframe(){
+		return (JFrame) (panelGaufre.getTopLevelAncestor());
+	}
 }
