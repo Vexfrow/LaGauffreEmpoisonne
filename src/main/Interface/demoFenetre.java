@@ -17,8 +17,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class demoFenetre implements Runnable {
 
@@ -131,8 +129,8 @@ public class demoFenetre implements Runnable {
 		JMenuItem buttonHumain = new JMenuItem("Humain");
 		buttonHumain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				c.choseType(Controleur.PVP);
-				c.newGame(jframe);
+				
+				c.newGame(jframe, Controleur.PVP);
 				
 			}
 		});
@@ -140,7 +138,7 @@ public class demoFenetre implements Runnable {
 		buttonIAAleatoire.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				c.choseType(Controleur.PVE);
-				c.newGame(jframe);
+				c.newGame(jframe, Controleur.PVE);
 				
 			}
 		});
@@ -395,7 +393,7 @@ public class demoFenetre implements Runnable {
 
 
 
-	public void newGame(int x, int y, JFrame j){
+	public void newGame(int x, int y, JFrame j, int type){
 		this.ligne = x;
 		this.colonne = y;
 		this.matrix = new JButton[this.ligne][this.colonne];
@@ -403,13 +401,15 @@ public class demoFenetre implements Runnable {
 		j.remove(panelHistorique);
 		initGaufre(j);
 		initHistorique(j);
+		
 		panelGaufre.revalidate();
 		panelHistorique.revalidate();
 		barMenu.revalidate();
 		
+		
 	}
 
-	public void newGameMenu(JFrame jframe){
+	public void newGameMenu(JFrame jframe, int type){
 		JFrame jf = new JFrame("New Game");
 		jf.setMinimumSize(new Dimension(210, 100));
 		JPanel pane = new JPanel(new GridLayout(1, 3));
@@ -431,8 +431,9 @@ public class demoFenetre implements Runnable {
 		b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				jf.dispose();
-				newGame((Integer) sp1.getNumber(),(Integer)sp2.getNumber(), jframe);
-				d.newJeu();
+				newGame((Integer) sp1.getNumber(),(Integer)sp2.getNumber(), jframe, type);
+				d.newJeu(type);
+				d.choseType(type);
 			}
 		});
 
@@ -446,6 +447,6 @@ public class demoFenetre implements Runnable {
 	}
 
 	public JFrame getframe(){
-		return (JFrame) barMenu.getParent();
+		return (JFrame) (panelGaufre.getTopLevelAncestor());
 	}
 }

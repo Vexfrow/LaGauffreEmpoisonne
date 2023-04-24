@@ -7,17 +7,22 @@ import Jeu.Jeu;
 import java.util.Hashtable;
 import java.util.ArrayList;
 import java.util.Queue;
+
+import Controlleur.Controleur;
+
 import java.util.LinkedList;
 
 
 
-class IAArbre extends Joueur {
+public class IAArbre extends Joueur {
+    Controleur c;
 
+    public IAArbre(Controleur c){
+        
+        super(c.getJeu());
+        this.c = c;
 
-IAArbre(Jeu j){
-    super(j);
-
-}
+    }
 
     public int hash(int [][]terrain, int joueur){
         int hash = Arrays.deepHashCode(terrain);

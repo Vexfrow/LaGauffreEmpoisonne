@@ -24,7 +24,13 @@ public class IArandom extends Joueur {
 
     @Override
     public boolean elaboreCoup(){
-        if(!(j.terrain[0][1] ==0 || j.terrain[1][0]== 0)){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if((j.terrain[0][1] !=0 && j.terrain[1][0] != 0)){
             return false;
         }
 
@@ -37,7 +43,7 @@ public class IArandom extends Joueur {
         }
         Coup cp = new Coup(l,c);
         this.c.joue(cp);
-        System.out.println("Coup joué");
+        
         return true;
     }
 
