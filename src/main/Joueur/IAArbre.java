@@ -54,7 +54,7 @@ IAArbre(Jeu j){
     }
 
     @Override
-    boolean elaboreCoup(){
+    public boolean elaboreCoup(){
         int [][]cases = cloneTerrain(j.terrain);
         int [][]terrainfils;
         int joueurfils;
