@@ -13,6 +13,7 @@ public class Jeu {
     public int nbcolonne;
     private ArrayList<Coup> coupJoue;
     private ArrayList<Coup> coupAnnule;
+	private boolean lose;
 
     // Construire le jeu via une sauvegarde
     Jeu(String fichier){
@@ -137,17 +138,17 @@ public class Jeu {
         int c = cp.c;
         if (getCase(l,c) != 1) {
             while( l < this.nbligne){
-            c= cp.c;
-            while(c < this.nbcolonne){
-                terrain[l][c] = 1;
-                c++;
-            }
-            l++;
+				c= cp.c;
+				while(c < this.nbcolonne){
+					terrain[l][c] = 1;
+					c++;
+				}
+				l++;
+       		}
+			coupJoue.add(cp);
+			coupAnnule = new ArrayList<Coup>();
         }
-        coupJoue.add(cp);
-        coupAnnule = new ArrayList<Coup>();
-        }
-        
+
 
 
     }

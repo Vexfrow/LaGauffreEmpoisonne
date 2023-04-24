@@ -1,7 +1,7 @@
 package Jeu;
 
 public class Coup {
-    int l,c;
+    public int l,c;
 
 
 
