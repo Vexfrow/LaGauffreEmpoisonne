@@ -15,7 +15,7 @@ public class IArandom extends Joueur {
 }
 
     @Override
-    boolean elaboreCoup(){
+    void elaboreCoup(){
         int l, c;
         l = r.nextInt(j.nbligne);
         c= r.nextInt(j.nbcolonne);
@@ -26,7 +26,6 @@ public class IArandom extends Joueur {
         }
         Coup cp = new Coup(l,c);
         j.joue(cp);
-        return true;
     }
 
 }

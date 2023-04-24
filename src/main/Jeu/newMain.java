@@ -4,6 +4,8 @@ import Jeu.Jeu;
 import Jeu.Coup;
 import Joueur.Etat;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class newMain {
 
@@ -59,6 +61,14 @@ public class newMain {
         System.out.println(j);
         System.out.println("");
         System.out.println("");
+
+
+
+        Queue<Integer> q = new LinkedList<Integer>();
+        q.add(2);
+        int popo = q.poll();
+        System.out.println("" + popo );
+
 
 
 

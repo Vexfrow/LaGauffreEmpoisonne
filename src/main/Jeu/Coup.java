@@ -21,4 +21,13 @@ public class Coup {
     public String toString() {
         return "Ligne = " + l + " ; Colonne = " +c;
     }
+
+    public boolean estValide(int [][] cases){
+        if(cases[l][c]==0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
 }

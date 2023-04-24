@@ -15,7 +15,7 @@ public class Jeu {
     private ArrayList<Coup> coupAnnule;
 
     private boolean jeuEnCours;
-    private int joueurCourant;
+    public int joueurCourant; //1 ou 2
 
     // Construire le jeu via une sauvegarde
     Jeu(String fichier){
@@ -262,10 +262,22 @@ public class Jeu {
 
     }
 
+
+
     //pour recuprer le contenu de la case
     public int getCase(int i, int j) {
     	return terrain[i][j];
     }
+
+    public boolean estFinale(){
+        if(terrain[0][0] == 1){
+            return true;
+        }else{ 
+            return false;
+        }
+    }
+
+
 
 	public String toString() {
 		String result = "Plateau:\n[";
