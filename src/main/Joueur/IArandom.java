@@ -22,8 +22,8 @@ public class IArandom extends Joueur {
 
         int l, c;
         l = r.nextInt(j.nbligne);
-        c= r.nextInt(j.nbcolonne);
-        while(!(j.terrain[l][c] == 0) ){
+        c= r.nextInt(j.nbcolonne-);
+        while(!(j.terrain[l][c] == 0 || (l ==0 && c ==0) ) ){
             l = r.nextInt(j.nbligne);
             c= r.nextInt(j.nbcolonne);
 
