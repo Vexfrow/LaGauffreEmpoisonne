@@ -99,6 +99,11 @@ public class Controleur{
         
 
         
+        this.j.joue(c);
+        this.window.majNiveau(j.terrain);
+        this.window.majHistorique(j.getCoupJoue());
+        System.out.println(j);
+
     }
 
     public void switchPlayer(){
@@ -150,7 +155,6 @@ public class Controleur{
             }
             
         }
-        
     }
 
 

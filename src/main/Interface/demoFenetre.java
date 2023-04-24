@@ -1,7 +1,6 @@
 
 package Interface;
 
-
 import javax.swing.*;
 
 import Controlleur.Controleur;
@@ -17,6 +16,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -40,6 +40,9 @@ public class demoFenetre implements Runnable {
 	public int getColonne(){
 		return this.colonne;
 	}
+	DefaultListModel<String> model;
+
+
 
 	public demoFenetre(int x, int y){
 		this.ligne = x;
@@ -61,7 +64,7 @@ public class demoFenetre implements Runnable {
 
 
 	public void run() {
-		// Creation d'une fenetre
+		// Creation d'une fenêtre
 		JFrame frame = new JFrame("La gaufre empoisonnée");
 
 		// Un clic sur le bouton de fermeture clos l'application
@@ -118,19 +121,13 @@ public class demoFenetre implements Runnable {
 	}
 
 
-	public static void main(String[] args){
-		new demoFenetre(5, 5);
-
-	}
-
-
 	public void initBarMenu(JFrame jframe){
 		barMenu = new JMenuBar();
 
 		//Menu "Nouvelle Partie"
 		JMenu listeNouvellePartie = new JMenu("Nouvelle Partie");
 		//Boutons du menu "Nouvelle Partie"
-		JMenuItem buttonIAAleatoire = new JMenuItem("IA Aleatoire");
+		JMenuItem buttonIAAleatoire = new JMenuItem("IA Aléatoire");
 		JMenuItem buttonHumain = new JMenuItem("Humain");
 		buttonHumain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -226,10 +223,7 @@ public class demoFenetre implements Runnable {
 		separator.setBackground(Color.getHSBColor(0, 0, 0));
 
 		//Historique de la partie
-		DefaultListModel<String> model = new DefaultListModel<>();
-		model.addElement("Test1");
-		model.addElement("Test2");
-		model.addElement("Test3");
+		model = new DefaultListModel<>();
 
 		JList<String> listeCoups = new JList<>(model);
 		JTextArea titreHistorique = new JTextArea("Historique des coups");
@@ -389,6 +383,17 @@ public class demoFenetre implements Runnable {
 		jf.setSize(100,100);
 		jf.setVisible(true);
 	}
+
+
+	public void majHistorique(ArrayList<Coup> c){
+		model.removeAllElements();
+		for(int i = 0; i < c.size() ; i++){
+			model.addElement(c.get(i).toString());
+		}
+
+	}
+
+
 
 	public void newGame(int x, int y, JFrame j){
 		this.ligne = x;

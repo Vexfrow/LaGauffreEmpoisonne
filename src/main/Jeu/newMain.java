@@ -1,5 +1,12 @@
 package Jeu;
 
+import Jeu.Jeu;
+import Jeu.Coup;
+import Joueur.Etat;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class newMain {
 
 
@@ -19,6 +26,7 @@ public class newMain {
         System.out.println("");
 
 
+
         System.out.println(" joue en 1,0");
         cp = new Coup(1,0);
         j.joue(cp);
@@ -27,11 +35,13 @@ public class newMain {
         System.out.println("");
 
 
+
         System.out.println("j'annule");
         j.annule();
         System.out.println(j);
         System.out.println("");
         System.out.println("");
+
 
 
         System.out.println("j'annule");
@@ -51,6 +61,17 @@ public class newMain {
         System.out.println(j);
         System.out.println("");
         System.out.println("");
+
+
+
+        Queue<Integer> q = new LinkedList<Integer>();
+        q.add(2);
+        int popo = q.poll();
+        System.out.println("" + popo );
+
+
+
+
 
 
 
