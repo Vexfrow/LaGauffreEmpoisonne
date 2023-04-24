@@ -42,17 +42,18 @@ public class FenetreJeu implements Runnable {
 	JPanel panelHistorique;
 	JPanel panelGaufre;
 
+	JSplitPane splitPane;
 	GaufreGraphique gaufreGraphique;
 	JTextArea infoJoueur;
 
 	DefaultListModel<String> model;
 
 
-
 	public FenetreJeu(Jeu j, CollecteurEvenements ce){
 		barMenu = null;
 		panelHistorique = null;
 		panelGaufre = null;
+		splitPane = null;
 
 		controleur = ce;
 		controleur.ajouteInterface(this);
@@ -69,13 +70,14 @@ public class FenetreJeu implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 
 	public void run() {
 		// Creation d'une fenêtre
 		mainFrame = new JFrame("La gaufre empoisonnée");
+		mainFrame.setLayout(new BorderLayout());
 
 		// On fixe la taille et on démarre
 		mainFrame.setSize(530, 300);
@@ -87,12 +89,14 @@ public class FenetreJeu implements Runnable {
 		initHistorique();
 		initGaufre();
 
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelGaufre, panelHistorique);
+		splitPane.setResizeWeight(0.80);
+		mainFrame.add(splitPane, BorderLayout.CENTER);
+
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setVisible(true);
 
 	}
-
-
 
 
 	//Fonction pour initialiser la bar situé en haut de la fenêtre de jeu
@@ -172,8 +176,6 @@ public class FenetreJeu implements Runnable {
 	}
 
 
-
-
 	//Fonction pour initialiser le menu situé sur la droite de la fenêtre de jeu
 	public void initHistorique() {
 
@@ -181,9 +183,9 @@ public class FenetreJeu implements Runnable {
 
 		//Panel contenant l'historique et l'information sur le tour actuel
 		panelHistorique = new JPanel(layoutMenu);
-		Dimension dim = new Dimension(mainFrame.getWidth()/3, mainFrame.getHeight());
+		Dimension dim = new Dimension(mainFrame.getWidth()/2, mainFrame.getHeight());
+		panelHistorique.setMinimumSize(dim);
 		panelHistorique.setPreferredSize(dim);
-
 
 
 		//Information sur le tour actuel
@@ -231,10 +233,8 @@ public class FenetreJeu implements Runnable {
 
 		panelHistorique.setBorder(BorderFactory.createLineBorder(Color.red));
 
-		mainFrame.add(panelHistorique, SpringLayout.EAST);
 
 	}
-
 
 
 	//Fonction pour initialiser la gaufre
@@ -244,7 +244,6 @@ public class FenetreJeu implements Runnable {
 		panelGaufre.add(gaufreGraphique);
 		panelGaufre.setVisible(true);
 		gaufreGraphique.addMouseListener(new AdaptateurSouris(gaufreGraphique, controleur));
-		mainFrame.add(panelGaufre);
 	}
 
 
@@ -259,6 +258,7 @@ public class FenetreJeu implements Runnable {
 
 		buttonAnnulerC.setEnabled(jeu.peutAnnuler());
 		buttonRestaurerC.setEnabled(jeu.peutRefaire());
+		majHistorique(jeu.getHistorique());
 
 
 	}
@@ -271,7 +271,6 @@ public class FenetreJeu implements Runnable {
 		File[] listeFile = repertoireSauvegarde.listFiles();
 
 		JList<File> listeFichiers = new JList<>(listeFile);
-
 
 
 		Box boxSud = new Box(BoxLayout.X_AXIS);
@@ -324,7 +323,9 @@ public class FenetreJeu implements Runnable {
 		text.addKeyListener(new KeyListener() {
 
 			public void keyTyped(KeyEvent e){}
+
 			public void keyReleased(KeyEvent e){}
+
 			@Override
 			public void keyPressed(KeyEvent e){
 				char ch = e.getKeyChar();
@@ -344,11 +345,13 @@ public class FenetreJeu implements Runnable {
 	public void majHistorique(ArrayList<Coup> c){
 		model.removeAllElements();
 		for(int i = 0; i < c.size() ; i++){
-			model.addElement(c.get(i).toString());
+			if(i%2 == 0)
+				model.addElement("Joueur n°1 à joué : " + c.get(i).toString());
+			else
+				model.addElement("Joueur n°2 à joué : " + c.get(i).toString());
 		}
 
 	}
-
 
 
 	public void newGame(){
@@ -357,6 +360,10 @@ public class FenetreJeu implements Runnable {
 		mainFrame.remove(panelHistorique);
 		initGaufre();
 		initHistorique();
+
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelGaufre, panelHistorique);
+		splitPane.setResizeWeight(0.80);
+		mainFrame.add(splitPane, BorderLayout.CENTER);
 
 		panelGaufre.revalidate();
 		panelHistorique.revalidate();
@@ -400,7 +407,4 @@ public class FenetreJeu implements Runnable {
 
 	}
 
-	public JFrame getframe(){
-		return (JFrame) (panelGaufre.getTopLevelAncestor());
-	}
 }

@@ -20,7 +20,7 @@ public class Controleur implements CollecteurEvenements {
     public static final int PVE = 2;
     public static final int EVE = 3;
     public static final int PVR = 4;
-    private static final String DIRECTORY = "./rsc/sauvegarde/";
+    private static final String DIRECTORY = "rsc/sauvegarde/";
     private boolean lose; //Met fin à la partie
     private Joueur p1;
     private Joueur p2;

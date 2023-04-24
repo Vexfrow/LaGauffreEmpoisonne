@@ -1,9 +1,6 @@
 package Jeu;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.FileReader;
-import java.io.BufferedReader;
+import java.io.*;
 import java.util.Arrays;
 import java.util.ArrayList;
 
@@ -101,6 +98,10 @@ public class Jeu {
         jeuEnCours = true;
         joueurCourant = 1;
 
+    }
+
+    public ArrayList<Coup> getHistorique(){
+        return coupJoue;
     }
 
     public void annule(){
@@ -212,7 +213,8 @@ public class Jeu {
 
         try {
 
-			FileWriter w = new FileWriter(name);
+            File file = new File(name);
+            BufferedWriter w = new BufferedWriter(new FileWriter(file));
 			
             //stockage des différentes valeurs
 			w.write(nbligne + "\n");
@@ -331,13 +333,6 @@ public void charger(String fichier){
 
 		}
     }
-
-    public ArrayList<Coup> getCoupJoue(){
-        return coupJoue;
-    }
-
-
-
 
 
 
