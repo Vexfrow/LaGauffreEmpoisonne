@@ -39,17 +39,69 @@ IAArbre(Jeu j){
     }
 
 
+    public int[][] jouer(Coup cp, int [][]terrain ){
+        int l = cp.l;
+        int c = cp.c;
+        while( l < terrain[0].length){
+            c= cp.c;
+            while(c < terrain.length){
+                terrain[l][c] = 1;
+                c++;
+            }
+            l++;
+        }
+        return terrain;
+    }
+
     @Override
-    void elaboreCoup(){
+    boolean elaboreCoup(){
         int [][]cases = cloneTerrain(j.terrain);
+        int [][]terrainfils;
+        int joueurfils;
+        Coup cp;
 
-        Hashtable<Integer, Etat> hashTable= new Hashtable<Integer, Etat>();
+        Hashtable<Integer, Etat> vu= new Hashtable<Integer, Etat>();
         Queue<Etat> file = new LinkedList<Etat>();
-        Etat etat = new Etat(cases,j.joueurCourant);
+
+        Etat etatdep = new Etat(cases,j.joueurCourant);
+        Etat etatcourant;
+        Etat etatfils;
 
 
+        file.add(etatdep);
+        vu.put(etatdep.hash,etatdep);
 
 
+        while ( (etatcourant =file.poll()) != null ){
+            if(etatcourant.joueur==1){
+                joueurfils=2;
+            }else{
+                joueurfils=1;
+            }
+
+            int l =0;
+            int c =0;
+            while( l < etatcourant.terrain[0].length){
+                while(c < etatcourant.terrain.length){
+                    cp = new Coup(l,c);
+                    if(cp.estValide(etatcourant.terrain)){ // Si c un fils possible
+                        if(!vu.containsKey(etatcourant.hash)){ // S'il  pas est dans la table de hashage
+                            terrainfils =cloneTerrain(etatcourant.terrain);
+                            terrainfils=jouer(cp,terrainfils);
+                            etatfils = new Etat(terrainfils,joueurfils);
+                            etatcourant.fils.add(etatfils);
+                            file.add(etatfils);  
+                            vu.put(etatfils.hash, etatdep);
+                        }
+
+                    }
+                    c++;
+                }
+                l++;
+            }
+
+        }
+    return true;
     }
 
 

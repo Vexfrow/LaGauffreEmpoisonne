@@ -15,7 +15,11 @@ public class IArandom extends Joueur {
 }
 
     @Override
-    void elaboreCoup(){
+    boolean elaboreCoup(){
+        if(!(j.terrain[0][1] ==0 || j.terrain[1][0]== 0)){
+            return false;
+        }
+
         int l, c;
         l = r.nextInt(j.nbligne);
         c= r.nextInt(j.nbcolonne);
@@ -26,6 +30,14 @@ public class IArandom extends Joueur {
         }
         Coup cp = new Coup(l,c);
         j.joue(cp);
+        return true;
     }
+
+    
+
+
+
+
+
 
 }

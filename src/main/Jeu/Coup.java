@@ -1,8 +1,8 @@
 package Jeu;
 
 public class Coup {
-    int l,c;
-
+    public int c;
+    public int l;
 
 
     public Coup(int ligne, int colonne){

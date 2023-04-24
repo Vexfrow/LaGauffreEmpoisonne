@@ -13,7 +13,8 @@ public abstract class Joueur {
     }
 
 
-    void elaboreCoup(){
+    boolean elaboreCoup(){
+        return true;
     }
 
 }

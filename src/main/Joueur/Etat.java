@@ -7,7 +7,7 @@ public class Etat{
     public int hash;
     public int joueur;
     public boolean gagnant;
-    private ArrayList<Etat> fils;
+    public ArrayList<Etat> fils;
     int [][] terrain;
 
     public Etat(int[][] terrain, int joueur){
